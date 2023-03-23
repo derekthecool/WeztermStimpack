@@ -62,6 +62,13 @@ return {
     -- { key = '»', mods = 'CTRL', action = act.ActivateWindowRelative(1) },
     -- { key = '«', mods = 'CTRL', action = act.ActivateWindowRelative(-1) },
 
+    -- Function key mappings
+    {
+        key = 'F1',
+        mods = 'NONE',
+        action = act.ActivateCommandPalette,
+    },
+
     {
         key = 'h',
         mods = 'LEADER',
@@ -82,8 +89,6 @@ return {
         mods = 'LEADER',
         action = act.ActivatePaneDirection('Up'),
     },
-    -- NOTE: requires a nightly version as of 2023-03-16
-    -- { key = 'P', mods = 'CTRL', action = act.ActivateCommandPalette },
     {
         key = 'F9',
         mods = 'NONE',

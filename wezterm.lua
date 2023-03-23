@@ -5,7 +5,8 @@ local mux = wezterm.mux
 -- My configuration WeztermStimpack modules
 local colors = require('WeztermStimpack.colors')
 local keymaps = require('WeztermStimpack.keymaps')
-local keymap_tables require('WeztermStimpack.keymap-tables')
+local keymap_tables = require('WeztermStimpack.keymap-tables')
+local ssh_domains = require('WeztermStimpack.ssh-domains')
 
 -- Allow custom tab rename
 -- https://github.com/wez/wezterm/issues/522
@@ -31,6 +32,8 @@ wezterm.on('bell', function(window, pane)
 end)
 
 wezterm.on('update-right-status', function(window, pane)
+    local cwd_uri = pane:get_current_working_dir()
+    wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
     -- "Wed Mar 3 08:14"
     local date = wezterm.strftime('%A %b %-d %H:%M ')
 
@@ -108,7 +111,7 @@ wezterm.on('gui-startup', function(cmd)
 
     local tab, pane, window = mux.spawn_window({
         workspace = workspaces[2],
-        cwd = os.getenv('USERPROFILE') .. [[\repos]],
+        cwd = os.getenv('USERPROFILE') .. [[\repos\Freeus.Tools]],
         -- args = { 'ntop' },
     })
 
@@ -119,6 +122,8 @@ wezterm.on('gui-startup', function(cmd)
 end)
 
 local config = {}
+
+config.window_close_confirmation = 'NeverPrompt'
 
 config.font = wezterm.font('JetBrains Mono')
 -- Enable ligatures
@@ -155,53 +160,7 @@ config.visual_bell = {
 -- Hold also requires a manual closing of the tab or pane
 config.exit_behavior = 'Hold'
 
-config.ssh_domains = {
-    {
-        -- The name of this specific domain.  Must be unique amongst
-        -- all types of domain in the configuration file.
-        name = 'device.MQTTBroker',
-        -- identifies the host:port pair of the remote server
-        -- Can be a DNS name or an IP address with an optional
-        -- ":port" on the end.
-        remote_address = '192.168.100.35',
-        -- Whether agent auth should be disabled.
-        -- Set to true to disable it.
-        -- no_agent_auth = false,
-
-        -- The username to use for authenticating with the remote host
-        username = 'jgarner',
-        -- Set to 'None' for ssh hosts that do not have wezterm available
-        -- multiplexing = 'None',
-        -- Only set the default_prog if using 'None'
-        -- default_prog = { 'bash' },
-        multiplexing = 'WezTerm',
-        -- If true, connect to this domain automatically at startup
-        -- connect_automatically = true,
-
-        -- Specify an alternative read timeout
-        -- timeout = 60,
-
-        -- The path to the wezterm binary on the remote host.
-        -- Primarily useful if it isn't installed in the $PATH
-        -- that is configure for ssh.
-        remote_wezterm_path = '~/WezTerm-20221119-145034-49b9839f-Ubuntu18.04.AppImage',
-    },
-    {
-        name = 'homeserver.Proxmox1',
-        remote_address = '192.168.1.57',
-        username = 'root',
-        -- Set to 'None' for ssh hosts that do not have wezterm available
-        -- multiplexing = 'None',
-        -- Only set the default_prog if using 'None'
-        -- default_prog = { 'bash' },
-        multiplexing = 'WezTerm',
-        -- If true, connect to this domain automatically at startup
-        -- connect_automatically = true,
-
-        -- Specify an alternative read timeout
-        -- timeout = 60,
-    },
-}
+config.ssh_domains = ssh_domains
 
 -- Easy picks for steno keyboard
 config.quick_select_alphabet = '1234567890'
@@ -236,9 +195,5 @@ config.launch_menu = {
 config.quote_dropped_files = 'WindowsAlwaysQuoted'
 
 config.show_update_window = true
-
--- WARNING: uses more graphics processing
-config.default_cursor_style = 'BlinkingBlock'
-config.cursor_blink_rate = 1300
 
 return config
