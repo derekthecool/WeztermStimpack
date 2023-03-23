@@ -32,14 +32,34 @@ wezterm.on('bell', function(window, pane)
 end)
 
 wezterm.on('update-right-status', function(window, pane)
-    local cwd_uri = pane:get_current_working_dir()
+    local cwd_uri = pane:get_current_working_dir() or ''
     wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
-    -- "Wed Mar 3 08:14"
-    local date = wezterm.strftime('%A %b %-d %H:%M ')
+    cwd_uri = cwd_uri:gsub('file:/+', '')
+    -- cwd_uri = cwd_uri
+    -- .. 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
+
+    local date = wezterm.strftime('%Y.%m.%-d')
+
+    local battery_levels = {
+        { '', { Foreground = { Color = '#FF0000' } } },
+        { '', { Foreground = { Color = '#FF0000' } } },
+        { '', { Foreground = { Color = '#FF0000' } } },
+        { '', { Foreground = { Color = '#FFFF00' } } },
+        { '', { Foreground = { Color = '#FFFF00' } } },
+        { '', { Foreground = { Color = '#FFFF00' } } },
+        { '', { Foreground = { Color = '#00FF00' } } },
+        { '', { Foreground = { Color = '#00FF00' } } },
+        { '', { Foreground = { Color = '#00FF00' } } },
+        { '', { Foreground = { Color = '#00FF00' } } },
+    }
 
     local bat = ''
+    local charge_percent_index = 1
     for _, b in ipairs(wezterm.battery_info()) do
-        bat = '🔋 ' .. string.format('%.0f%%', b.state_of_charge * 100)
+        -- TODO: Test to make sure battery levels work at high and low values and that numbers are not just in orders of 10
+        charge_percent_index = math.ceil(b.state_of_charge * 10)
+        local charge_percent = charge_percent_index * 10
+        bat = battery_levels[charge_percent_index][1] .. ' ' .. string.format('%d%%', charge_percent)
     end
 
     local leader = ''
@@ -47,11 +67,39 @@ wezterm.on('update-right-status', function(window, pane)
         leader = ' [L] '
     end
 
+    -- TODO: can the background here be made transparent??
+    local separator_icon_background = { Foreground = { Color = '#0000ff' } }
+    local separator_icon = { Text = '' }
+    local separator_icon = { Text = ' ፨ ' }
+
     window:set_right_status(wezterm.format({
+        'ResetAttributes',
+        { Text = cwd_uri },
+        { Foreground = { Color = '#ff0000' } },
         { Background = { Color = '#990099' } },
         { Text = leader },
         'ResetAttributes',
-        { Text = window:active_workspace() .. '   ' .. bat .. '   ' .. date },
+        separator_icon_background,
+        separator_icon,
+        'ResetAttributes',
+        { Foreground = { Color = '#1e8c1e' } },
+        { Text = ''},
+        { Background = { Color = '#1e8c1e' } },
+        { Foreground = { Color = '#053c8c' } },
+        { Text = window:active_workspace()},
+        'ResetAttributes',
+        { Foreground = { Color = '#1e8c1e' } },
+        { Text = ''},
+        'ResetAttributes',
+        separator_icon_background,
+        separator_icon,
+        battery_levels[charge_percent_index][2],
+        { Text = bat },
+        'ResetAttributes',
+        separator_icon_background,
+        separator_icon,
+        'ResetAttributes',
+        { Text = date },
     }))
 end)
 
