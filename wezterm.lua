@@ -69,37 +69,67 @@ wezterm.on('update-right-status', function(window, pane)
 
     -- TODO: can the background here be made transparent??
     local separator_icon_background = { Foreground = { Color = '#0000ff' } }
-    local separator_icon = { Text = '' }
     local separator_icon = { Text = ' ፨ ' }
 
+    local workspace_color = '#3d8fd1'
+
     window:set_right_status(wezterm.format({
+
+        -- Current terminal working directory. Requires OSC7 integration.
         'ResetAttributes',
+        { Foreground = { Color = workspace_color } },
+        { Text = ''},
+        { Background = { Color = workspace_color } },
+        { Foreground = { Color = '#053c8c' } },
         { Text = cwd_uri },
-        { Foreground = { Color = '#ff0000' } },
-        { Background = { Color = '#990099' } },
+        'ResetAttributes',
+        { Foreground = { Color = workspace_color } },
+        { Text = ''},
+        'ResetAttributes',
+
+        -- Leader symbol
+        { Foreground = { Color = '#053c8c' } },
+        { Background = { Color = '#c08b30' } },
         { Text = leader },
         'ResetAttributes',
+
+        -- Separator
         separator_icon_background,
         separator_icon,
         'ResetAttributes',
-        { Foreground = { Color = '#1e8c1e' } },
+
+        -- Active workspace
+        { Foreground = { Color = workspace_color } },
         { Text = ''},
-        { Background = { Color = '#1e8c1e' } },
+        { Background = { Color = workspace_color } },
         { Foreground = { Color = '#053c8c' } },
         { Text = window:active_workspace()},
         'ResetAttributes',
-        { Foreground = { Color = '#1e8c1e' } },
+        { Foreground = { Color = workspace_color } },
         { Text = ''},
         'ResetAttributes',
+
+        -- Battery
         separator_icon_background,
         separator_icon,
         battery_levels[charge_percent_index][2],
         { Text = bat },
         'ResetAttributes',
+
+        -- Separator
         separator_icon_background,
         separator_icon,
         'ResetAttributes',
+
+        -- Date
+        { Foreground = { Color = workspace_color } },
+        { Text = ''},
+        { Background = { Color = workspace_color } },
+        { Foreground = { Color = '#053c8c' } },
         { Text = date },
+        'ResetAttributes',
+        { Foreground = { Color = workspace_color } },
+        { Text = ''},
     }))
 end)
 
