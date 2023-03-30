@@ -15,11 +15,11 @@ local ssh_domains = require('WeztermStimpack.ssh-domains')
 -- Powershell version ready and working, need to get Linux shell versions too
 wezterm.on('format-tab-title', function(tab)
     local pane_title = tab.active_pane.title
-    local user_title = tab.active_pane.user_vars.panetitle
-
-    if user_title ~= nil and #user_title > 0 then
-        pane_title = user_title
-    end
+    -- local user_title = tab.active_pane.user_vars.panetitle
+    --
+    -- if user_title ~= nil and #user_title > 0 then
+    --     pane_title = user_title
+    -- end
 
     return {
         { Text = ' ' .. pane_title .. ' ' },
@@ -35,10 +35,6 @@ wezterm.on('update-right-status', function(window, pane)
     local cwd_uri = pane:get_current_working_dir() or ''
     wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
     cwd_uri = cwd_uri:gsub('file:/+', '')
-    -- cwd_uri = cwd_uri
-    -- .. 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww'
-
-    local date = wezterm.strftime('%Y.%m.%-d')
 
     local battery_levels = {
         { '', { Foreground = { Color = '#FF0000' } } },
@@ -56,10 +52,9 @@ wezterm.on('update-right-status', function(window, pane)
     local bat = ''
     local charge_percent_index = 1
     for _, b in ipairs(wezterm.battery_info()) do
-        -- TODO: Test to make sure battery levels work at high and low values and that numbers are not just in orders of 10
-        charge_percent_index = math.ceil(b.state_of_charge * 10)
-        local charge_percent = charge_percent_index * 10
-        bat = battery_levels[charge_percent_index][1] .. ' ' .. string.format('%d%%', charge_percent)
+        local charge_percent = b.state_of_charge * 100
+        charge_percent_index = math.floor(charge_percent / 10)
+        bat = string.format('%s %0.0f%%', battery_levels[charge_percent_index][1], charge_percent)
     end
 
     local leader = ''
@@ -78,13 +73,13 @@ wezterm.on('update-right-status', function(window, pane)
         -- Current terminal working directory. Requires OSC7 integration.
         'ResetAttributes',
         { Foreground = { Color = workspace_color } },
-        { Text = ''},
+        { Text = '' },
         { Background = { Color = workspace_color } },
         { Foreground = { Color = '#053c8c' } },
         { Text = cwd_uri },
         'ResetAttributes',
         { Foreground = { Color = workspace_color } },
-        { Text = ''},
+        { Text = '' },
         'ResetAttributes',
 
         -- Leader symbol
@@ -100,13 +95,13 @@ wezterm.on('update-right-status', function(window, pane)
 
         -- Active workspace
         { Foreground = { Color = workspace_color } },
-        { Text = ''},
+        { Text = '' },
         { Background = { Color = workspace_color } },
         { Foreground = { Color = '#053c8c' } },
-        { Text = window:active_workspace()},
+        { Text = window:active_workspace() },
         'ResetAttributes',
         { Foreground = { Color = workspace_color } },
-        { Text = ''},
+        { Text = '' },
         'ResetAttributes',
 
         -- Battery
@@ -120,16 +115,6 @@ wezterm.on('update-right-status', function(window, pane)
         separator_icon_background,
         separator_icon,
         'ResetAttributes',
-
-        -- Date
-        { Foreground = { Color = workspace_color } },
-        { Text = ''},
-        { Background = { Color = workspace_color } },
-        { Foreground = { Color = '#053c8c' } },
-        { Text = date },
-        'ResetAttributes',
-        { Foreground = { Color = workspace_color } },
-        { Text = ''},
     }))
 end)
 
@@ -205,15 +190,13 @@ config.window_close_confirmation = 'NeverPrompt'
 
 config.font = wezterm.font('JetBrains Mono')
 -- Enable ligatures
-config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
+config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1', 'twid=1' }
 
 -- Use the same color scheme as neovim
 config.color_scheme = 'Atelier Sulphurpool (base16)'
 
 -- Set different default shell
--- config.default_prog = { 'pwsh' }
--- On windows you can set the default shell with this administrator command
--- [System.Environment]::SetEnvironmentVariable("COMSPEC", 'C:\Users\dlomax\scoop\apps\pwsh\current\pwsh.exe', 'User')
+config.default_prog = { 'pwsh' }
 
 config.use_fancy_tab_bar = false
 config.show_new_tab_button_in_tab_bar = false
@@ -224,6 +207,17 @@ config.switch_to_last_active_tab_when_closing_tab = true
 -- Give me my precious terminal space back by having no padding and no title bar
 config.window_decorations = 'RESIZE'
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+
+-- config.window_background_image = 'C:\\Users\\dlomax\\.config\\wezterm\\lightning.jpeg'
+-- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\YkN.gif'
+-- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\Bx2q.gif'
+-- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\y8.gif'
+-- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\XZ5V.gif'
+-- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\7tw.gif'
+
+-- Slightly translucent background
+config.window_background_opacity = 0.72
+
 
 config.audible_bell = 'Disabled'
 config.visual_bell = {
@@ -236,15 +230,12 @@ config.visual_bell = {
 -- exit_behavior can be Close, Hold, CloseOnCleanExit, Close
 -- Hold is the most forgiving as it does not autoshut down and helps detect errors
 -- Hold also requires a manual closing of the tab or pane
-config.exit_behavior = 'Hold'
+config.exit_behavior = 'CloseOnCleanExit'
 
 config.ssh_domains = ssh_domains
 
 -- Easy picks for steno keyboard
 config.quick_select_alphabet = '1234567890'
-
--- Slightly translucent background
-config.window_background_opacity = 0.92
 
 config.colors = colors
 

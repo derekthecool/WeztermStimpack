@@ -58,6 +58,21 @@ return {
     { key = '¶', action = act.SwitchWorkspaceRelative(1) },
     { key = '∑', action = act.SwitchWorkspaceRelative(-1) },
 
+    {
+        key = 'a',
+        mods = 'CTRL|SHIFT',
+        action = act.SwitchToWorkspace({
+            name = 'CommandStation',
+        }),
+    },
+    {
+        key = 'o',
+        mods = 'CTRL|SHIFT',
+        action = act.SwitchToWorkspace({
+            name = 'Development',
+        }),
+    },
+
     -- Nightly builds only as of 2023-03-18
     -- { key = '»', mods = 'CTRL', action = act.ActivateWindowRelative(1) },
     -- { key = '«', mods = 'CTRL', action = act.ActivateWindowRelative(-1) },
@@ -103,11 +118,15 @@ return {
     {
         key = 'x',
         mods = 'LEADER',
-        action = act.CloseCurrentTab({ confirm = false }),
+        action = act.CloseCurrentPane({ confirm = false }),
     },
     -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('device.MQTTBroker') },
     -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('homeserver.Proxmox1') },
     -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('Development') },
+    { key = 'F2', mods = 'NONE', action = act.ScrollToPrompt(-1) },
+    { key = 'F3', mods = 'NONE', action = act.ScrollToPrompt(1) },
+    { key = 'F4', mods = 'NONE', action = act.SelectTextAtMouseCursor('SemanticZone') },
+    -- { key = 'F4', mods = 'NONE', action = act.ScrollToPrompt(-1) },
 
     -- Default key maps
     {
