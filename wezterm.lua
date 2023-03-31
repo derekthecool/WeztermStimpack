@@ -13,7 +13,7 @@ local ssh_domains = require('WeztermStimpack.ssh-domains')
 -- Requires sending special escape sequence and then title from shell
 -- Running `rename_wezterm_title "test"` will do it
 -- Powershell version ready and working, need to get Linux shell versions too
-wezterm.on('format-tab-title', function(tab)
+wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
     local pane_title = tab.active_pane.title
     -- local user_title = tab.active_pane.user_vars.panetitle
     --
@@ -21,8 +21,40 @@ wezterm.on('format-tab-title', function(tab)
     --     pane_title = user_title
     -- end
 
+    -- ensure that the titles fit in the available space,
+    -- and that we have room for the edges.
+    local pane_title = wezterm.truncate_right(tab.active_pane.title, max_width - 3)
+
+    local left_icon = ''
+    local right_icon = ''
+
+    local edge_background = '#0000ff'
+    local edge_foreground = '#ff0fff'
+
+    local full_background = require('WeztermStimpack.colors').tab_bar.background
+    local background = require('WeztermStimpack.colors').tab_bar.inactive_tab.bg_color
+    local foreground = background
+
+    if tab.is_active then
+        background = require('WeztermStimpack.colors').tab_bar.active_tab.bg_color
+        foreground = require('WeztermStimpack.colors').tab_bar.active_tab.fg_color
+    elseif hover then
+        background = require('WeztermStimpack.colors').tab_bar.inactive_tab_hover.bg_color
+        foreground = require('WeztermStimpack.colors').tab_bar.inactive_tab_hover.fg_color
+    end
+
     return {
-        { Text = ' ' .. pane_title .. ' ' },
+        { Background = { Color = full_background } },
+        { Foreground = { Color = background } },
+        { Text = left_icon },
+        'ResetAttributes',
+        { Text = pane_title },
+        { Background = { Color = full_background } },
+        'ResetAttributes',
+        { Background = { Color = full_background } },
+        { Foreground = { Color = background } },
+        { Text = right_icon },
+        { Text = ' ' },
     }
 end)
 
@@ -198,6 +230,7 @@ config.color_scheme = 'Atelier Sulphurpool (base16)'
 -- Set different default shell
 config.default_prog = { 'pwsh' }
 
+-- Tab bar config
 config.use_fancy_tab_bar = false
 config.show_new_tab_button_in_tab_bar = false
 config.show_tab_index_in_tab_bar = false
@@ -208,16 +241,8 @@ config.switch_to_last_active_tab_when_closing_tab = true
 config.window_decorations = 'RESIZE'
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 
--- config.window_background_image = 'C:\\Users\\dlomax\\.config\\wezterm\\lightning.jpeg'
--- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\YkN.gif'
--- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\Bx2q.gif'
--- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\y8.gif'
--- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\XZ5V.gif'
--- config.window_background_image = 'C:\\Users\\dlomax\\Downloads\\7tw.gif'
-
 -- Slightly translucent background
 config.window_background_opacity = 0.72
-
 
 config.audible_bell = 'Disabled'
 config.visual_bell = {
