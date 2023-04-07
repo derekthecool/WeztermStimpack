@@ -20,7 +20,8 @@ return {
     tab_bar = {
         -- The color of the strip that goes along the top of the window
         -- (does not apply when fancy tab bar is in use)
-        background = '#202746',
+        -- Use rgba instead of normal hex to specify alpha (transparency)
+        background = 'rgba(32, 39, 70, 0.0)',
         -- The active tab is the one that has focus in the window
         active_tab = {
             -- The color of the background area for the tab
