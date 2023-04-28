@@ -38,10 +38,7 @@ return {
             underline = 'None',
             -- Specify whether you want the text to be italic (true) or not (false)
             -- for this tab.  The default is false.
-            italic = false,
-            -- Specify whether you want the text to be rendered with strikethrough (true)
-            -- or not for this tab.  The default is false.
-            strikethrough = false,
+            italic = true,
         },
         -- Inactive tabs are the tabs that do not have focus
         inactive_tab = {

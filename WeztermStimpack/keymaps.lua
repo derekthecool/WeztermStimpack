@@ -1,3 +1,4 @@
+local wezterm = require('wezterm')
 local act = require('wezterm').action
 
 return {
@@ -22,6 +23,22 @@ return {
         key = 'w',
         mods = 'LEADER',
         action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'pwsh -c ls' } }),
+    },
+
+    {
+        key = 'F5',
+        -- mods = 'LEADER',
+        action = act.PromptInputLine({
+            description = 'Enter new name for tab',
+            action = wezterm.action_callback(function(window, pane, line)
+                -- line will be `nil` if they hit escape without entering anything
+                -- An empty string if they just hit enter
+                -- Or the actual line of text they wrote
+                if line then
+                    window:active_tab():set_title(line)
+                end
+            end),
+        }),
     },
 
     -- { key = 'T', mods = 'CTRL', action = act.SpawnTab('CurrentPaneDomain') },
@@ -84,6 +101,10 @@ return {
         action = act.ActivateCommandPalette,
     },
 
+    { key = 'h', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Left') },
+    { key = 'l', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Right') },
+    { key = 'j', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Up') },
+    { key = 'k', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Down') },
     {
         key = 'h',
         mods = 'LEADER',

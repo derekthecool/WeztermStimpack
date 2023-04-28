@@ -15,11 +15,11 @@ local ssh_domains = require('WeztermStimpack.ssh-domains')
 -- Powershell version ready and working, need to get Linux shell versions too
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
     local pane_title = tab.active_pane.title
-    -- local user_title = tab.active_pane.user_vars.panetitle
-    --
-    -- if user_title ~= nil and #user_title > 0 then
-    --     pane_title = user_title
-    -- end
+    local user_title = tab.active_pane.user_vars.panetitle
+
+    if user_title ~= nil and (#user_title > 0 or pane_title == 'pwsh.exe') then
+        pane_title = user_title
+    end
 
     -- ensure that the titles fit in the available space,
     -- and that we have room for the edges.
@@ -36,11 +36,9 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
     local foreground = background
 
     if tab.is_active then
-        background = require('WeztermStimpack.colors').tab_bar.active_tab.bg_color
-        foreground = require('WeztermStimpack.colors').tab_bar.active_tab.fg_color
+        background = full_background
     elseif hover then
         background = require('WeztermStimpack.colors').tab_bar.inactive_tab_hover.bg_color
-        foreground = require('WeztermStimpack.colors').tab_bar.inactive_tab_hover.fg_color
     end
 
     return {
@@ -67,6 +65,8 @@ wezterm.on('update-right-status', function(window, pane)
     local cwd_uri = pane:get_current_working_dir() or ''
     wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
     cwd_uri = cwd_uri:gsub('file:/+', '')
+    cwd_uri = cwd_uri:gsub('%%20', ' ')
+    cwd_uri = cwd_uri:gsub([[C:/Users/%w+/]], '~/')
 
     local battery_levels = {
         { '', { Foreground = { Color = '#FF0000' } } },
@@ -220,9 +220,10 @@ local config = {}
 
 config.window_close_confirmation = 'NeverPrompt'
 
+config.font_size = 14
 config.font = wezterm.font('JetBrains Mono')
 -- Enable ligatures
-config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1', 'twid=1' }
+config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
 
 -- Use the same color scheme as neovim
 config.color_scheme = 'Atelier Sulphurpool (base16)'
@@ -262,6 +263,13 @@ config.ssh_domains = ssh_domains
 -- Easy picks for steno keyboard
 config.quick_select_alphabet = '1234567890'
 
+-- Add to list of quick select patterns
+-- Not limited to lua matching, we can use rust regex wahoo!
+config.quick_select_patterns = {
+    -- Windows paths
+    '[C-Z]:\\S+',
+}
+
 config.colors = colors
 
 -- Set leader key
@@ -284,6 +292,30 @@ config.launch_menu = {
     { args = { 'scoop update *' } },
     { args = { 'scoop', 'cleanup', '*' } },
 }
+
+-- This thing is clever but it is full of issues, this script is all I need
+-- & 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1'
+--
+-- if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+--     table.insert(config.launch_menu, {
+--         label = 'PowerShell',
+--         args = { 'powershell.exe', '-NoLogo' },
+--     })
+--
+--     -- Find installed visual studio version(s) and add their compilation
+--     -- environment command prompts to the menu
+--     for _, vsvers in ipairs(wezterm.glob('Microsoft Visual Studio/20*', 'C:/Program Files')) do
+--         local year = vsvers:gsub('Microsoft Visual Studio/', '')
+--         table.insert(config.launch_menu, {
+--             label = 'x64 Native Tools VS ' .. year,
+--             args = {
+--                 'cmd.exe',
+--                 '/k',
+--                 'C:/Program Files/' .. vsvers .. '/BuildTools/VC/Auxiliary/Build/vcvars64.bat',
+--             },
+--         })
+--     end
+-- end
 
 -- TODO: perhaps need to make this apply with windows only
 config.quote_dropped_files = 'WindowsAlwaysQuoted'
