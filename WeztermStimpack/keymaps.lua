@@ -103,8 +103,8 @@ return {
 
     { key = 'h', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Left') },
     { key = 'l', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Right') },
-    { key = 'j', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Up') },
-    { key = 'k', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Down') },
+    { key = 'j', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Down') },
+    { key = 'k', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Up') },
     {
         key = 'h',
         mods = 'LEADER',

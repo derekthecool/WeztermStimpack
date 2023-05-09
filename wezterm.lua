@@ -286,8 +286,8 @@ config.key_tables = keymap_tables
 
 -- TODO: add more items here to launch
 config.launch_menu = {
-    { args = { 'ntop' } },
-    { args = { 'lftp' } },
+    { args = { 'termscp' } },
+    { args = { 'btop' } },
     { args = { 'pwsh', '-c', [[Get-Content $env:LOCALAPPDATA\Plover\Plover\tapey_tape.txt -Tail 50 -Wait]] } },
     { args = { 'scoop update *' } },
     { args = { 'scoop', 'cleanup', '*' } },
