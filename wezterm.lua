@@ -67,6 +67,24 @@ wezterm.on('update-right-status', function(window, pane)
     cwd_uri = cwd_uri:gsub('file:/+', '')
     cwd_uri = cwd_uri:gsub('%%20', ' ')
     cwd_uri = cwd_uri:gsub([[C:/Users/%w+/]], '~/')
+    cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
+        local output = path_item
+
+        local MAXIMUM_PATH_LENGTH = 7
+        local START_TRIM_LENGTH = 3
+        local END_TRIM_LENGTH = 3
+        local path_length = #path_item
+        if path_length > MAXIMUM_PATH_LENGTH then
+            output = string.format(
+                '%s↔️%s',
+                path_item:sub(1, START_TRIM_LENGTH),
+                path_item:sub(path_length - END_TRIM_LENGTH, path_length)
+            )
+            -- output = string.format('%s', path_item:sub(1, 3))
+        end
+
+        return output
+    end)
 
     local battery_levels = {
         { '', { Foreground = { Color = '#FF0000' } } },
