@@ -63,10 +63,11 @@ end)
 
 wezterm.on('update-right-status', function(window, pane)
     local cwd_uri = pane:get_current_working_dir() or ''
-    wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
+    -- wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
     cwd_uri = cwd_uri:gsub('file:/+', '')
     cwd_uri = cwd_uri:gsub('%%20', ' ')
     cwd_uri = cwd_uri:gsub([[C:/Users/%w+/]], '~/')
+    cwd_uri = cwd_uri:gsub('/home/[^/]+/', '~/')
     cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
         local output = path_item
 
@@ -80,24 +81,24 @@ wezterm.on('update-right-status', function(window, pane)
                 path_item:sub(1, START_TRIM_LENGTH),
                 path_item:sub(path_length - END_TRIM_LENGTH, path_length)
             )
-            -- output = string.format('%s', path_item:sub(1, 3))
         end
 
         return output
     end)
 
-    local battery_levels = {
-        { '', { Foreground = { Color = '#FF0000' } } },
-        { '', { Foreground = { Color = '#FF0000' } } },
-        { '', { Foreground = { Color = '#FF0000' } } },
-        { '', { Foreground = { Color = '#FFFF00' } } },
-        { '', { Foreground = { Color = '#FFFF00' } } },
-        { '', { Foreground = { Color = '#FFFF00' } } },
-        { '', { Foreground = { Color = '#00FF00' } } },
-        { '', { Foreground = { Color = '#00FF00' } } },
-        { '', { Foreground = { Color = '#00FF00' } } },
-        { '', { Foreground = { Color = '#00FF00' } } },
-    }
+    -- Replace common directories with icons
+    cwd_uri = cwd_uri:gsub('~/.config', '🔧')
+    cwd_uri = cwd_uri:gsub('~/AppData/Local', '🐟')
+    cwd_uri = cwd_uri:gsub('~/AppData/Roaming', '🎱')
+    cwd_uri = cwd_uri:gsub('C:', '©️')
+
+    local letter_emojis = require('WeztermStimpack.icons').letter_emojis
+    cwd_uri = cwd_uri:gsub('D:', function(windows_path_starter)
+        return letter_emojis[windows_path_starter:sub(1, 1)]
+    end)
+    cwd_uri = cwd_uri:gsub('~', '🏠')
+
+    local battery_levels = require('WeztermStimpack.icons').battery_levels
 
     local bat = ''
     local charge_percent_index = 1

@@ -75,6 +75,22 @@ return {
     { key = '¶', action = act.SwitchWorkspaceRelative(1) },
     { key = '∑', action = act.SwitchWorkspaceRelative(-1) },
 
+    -- {
+    --     key = 'F6',
+    --     mods = 'NONE',
+    --     action = wezterm.action_callback(function(win, pane)
+    --         local check = act.ActivateTab(2)
+    --         return check
+    --         -- local check = act.ActivateTab(2) or 'NULL!!'
+    --         -- wezterm.log_warn('Hello from callback!' .. check)
+    --         -- wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
+    --         -- wezterm.log_info('Hello from callback!' .. win:window_id())
+    --         -- win:maximize()
+    --         -- act.ActivateTab(2)()()
+    --         -- require('wezter').action.ActivateTab(2)
+    --     end),
+    -- },
+
     {
         key = 'a',
         mods = 'CTRL|SHIFT',
