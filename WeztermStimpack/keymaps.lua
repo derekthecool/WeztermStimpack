@@ -106,13 +106,9 @@ return {
         }),
     },
 
-    -- Nightly builds only as of 2023-03-18
-    -- { key = '»', mods = 'CTRL', action = act.ActivateWindowRelative(1) },
-    -- { key = '«', mods = 'CTRL', action = act.ActivateWindowRelative(-1) },
-
     -- Function key mappings
     {
-        key = 'F1',
+        key = 'F3',
         mods = 'NONE',
         action = act.ActivateCommandPalette,
     },
@@ -141,11 +137,12 @@ return {
         mods = 'LEADER',
         action = act.ActivatePaneDirection('Up'),
     },
-    {
-        key = 'F9',
-        mods = 'NONE',
-        action = act.ShowTabNavigator,
-    },
+
+    -- {
+    --     key = 'F9',
+    --     mods = 'NONE',
+    --     action = act.ShowTabNavigator,
+    -- },
 
     {
         key = 'a',
@@ -157,13 +154,14 @@ return {
         mods = 'LEADER',
         action = act.CloseCurrentPane({ confirm = false }),
     },
-    -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('device.MQTTBroker') },
-    -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('homeserver.Proxmox1') },
-    -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('Development') },
-    { key = 'F2', mods = 'NONE', action = act.ScrollToPrompt(-1) },
-    { key = 'F3', mods = 'NONE', action = act.ScrollToPrompt(1) },
-    { key = 'F4', mods = 'NONE', action = act.SelectTextAtMouseCursor('SemanticZone') },
-    -- { key = 'F4', mods = 'NONE', action = act.ScrollToPrompt(-1) },
+
+    -- -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('device.MQTTBroker') },
+    -- -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('homeserver.Proxmox1') },
+    -- -- { key = 'F10', mods = 'NONE', action = wezterm.action.AttachDomain('Development') },
+    -- { key = 'F2', mods = 'NONE', action = act.ScrollToPrompt(-1) },
+    -- { key = 'F3', mods = 'NONE', action = act.ScrollToPrompt(1) },
+    -- { key = 'F4', mods = 'NONE', action = act.SelectTextAtMouseCursor('SemanticZone') },
+    -- -- { key = 'F4', mods = 'NONE', action = act.ScrollToPrompt(-1) },
 
     -- Default key maps
     {

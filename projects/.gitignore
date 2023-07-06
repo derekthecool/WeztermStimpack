@@ -1,0 +1,4 @@
+# Ignore everything in this folder, this file is a place holder
+*
+!.gitignore
+!HowToUseProjectWorkspaces.md

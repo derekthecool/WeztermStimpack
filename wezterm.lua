@@ -7,6 +7,7 @@ local colors = require('WeztermStimpack.colors')
 local keymaps = require('WeztermStimpack.keymaps')
 local keymap_tables = require('WeztermStimpack.keymap-tables')
 local ssh_domains = require('WeztermStimpack.ssh-domains')
+local crossplatform = require('WeztermStimpack.crossplatform')
 
 -- Allow custom tab rename
 -- https://github.com/wez/wezterm/issues/522
@@ -183,7 +184,6 @@ wezterm.on('gui-startup', function(cmd)
 
     local workspaces = {
         'CommandStation',
-        'Development',
     }
 
     -- Set a workspace for coding on a current project
@@ -191,6 +191,7 @@ wezterm.on('gui-startup', function(cmd)
     local tab, build_pane, window = mux.spawn_window({
         workspace = workspaces[1],
         cwd = os.getenv('USERPROFILE') .. [[\.config\wezterm]],
+        -- cwd = crossplatform.path.join_path(wezterm.home_dir, '.config', 'wezterm'),
         args = args,
     })
 
@@ -223,14 +224,31 @@ wezterm.on('gui-startup', function(cmd)
     -- A workspace for interacting with a local machine that
     -- runs some docker containners for home automation
 
-    local tab, pane, window = mux.spawn_window({
-        workspace = workspaces[2],
-        cwd = os.getenv('USERPROFILE') .. [[\repos\Freeus.Tools]],
-        -- args = { 'ntop' },
-    })
+    -- local tab, pane, window = mux.spawn_window({
+    --     workspace = workspaces[2],
+    --     cwd = os.getenv('USERPROFILE') .. [[\repos\Freeus.Tools]],
+    --     -- args = { 'ntop' },
+    -- })
 
-    local extraTab, extraPane, extraWindow =
-        window:spawn_tab({ cwd = [[D:\Wallaby\wearable_post_BelleW_research\PPG_code\2023-01-24_ESP_IDF\i2c_simple\]] })
+    -- local extraTab, extraPane, extraWindow =
+    --     window:spawn_tab({ cwd = [[D:\Wallaby\wearable_post_BelleW_research\PPG_code\2023-01-24_ESP_IDF\i2c_simple\]] })
+
+    -- Build project directories as found in the directory ./projects/*.lua
+    -- local project_directory_files = wezterm.read_dir(crossplatform.path.join_path(wezterm.config_dir, 'projects'))
+    local project_directory_files = wezterm.read_dir([[C:\Users\dlomax\.config\wezterm\projects]])
+
+    for i, path in ipairs(project_directory_files) do
+        wezterm.log_info(string.format('File number %d = %s', i, path))
+
+        local check_for_lua_file = path:match('(projects.*)%.lua')
+        if check_for_lua_file ~= nil then
+            check_for_lua_file = check_for_lua_file:gsub('[\\/]','.')
+            print('Running command: require ' .. check_for_lua_file)
+            require(check_for_lua_file)
+        end
+    end
+
+    require('projects.Freeus')
 
     mux.set_active_workspace(workspaces[1])
 end)
@@ -315,7 +333,7 @@ config.launch_menu = {
 -- This thing is clever but it is full of issues, this script is all I need
 -- & 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1'
 --
--- if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+-- if wezngterm.target_triple == 'x86_64-pc-windows-msvc' then
 --     table.insert(config.launch_menu, {
 --         label = 'PowerShell',
 --         args = { 'powershell.exe', '-NoLogo' },
