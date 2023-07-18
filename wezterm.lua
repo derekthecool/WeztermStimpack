@@ -357,6 +357,6 @@ config.launch_menu = {
 -- TODO: perhaps need to make this apply with windows only
 config.quote_dropped_files = 'WindowsAlwaysQuoted'
 
-config.show_update_window = true
+config.show_update_window = false
 
 return config
