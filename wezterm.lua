@@ -186,17 +186,18 @@ wezterm.on('gui-startup', function(cmd)
         'CommandStation',
     }
 
+    local wezterm_config_directory = string.format('%s/.config/wezterm', wezterm.home_dir)
+
     -- Set a workspace for coding on a current project
     -- Top pane is for the editor, bottom pane is for the build tool
     local tab, build_pane, window = mux.spawn_window({
         workspace = workspaces[1],
-        cwd = os.getenv('USERPROFILE') .. [[\.config\wezterm]],
-        -- cwd = crossplatform.path.join_path(wezterm.home_dir, '.config', 'wezterm'),
+        cwd = wezterm_config_directory,
         args = args,
     })
 
     -- Open neovim to wezterm config
-    build_pane:send_text('nvim wezterm.lua\r\n')
+    -- build_pane:send_text('nvim wezterm.lua\r\n')
     tab:set_title('Wezterm')
 
     -- Neovim tab
@@ -210,7 +211,8 @@ wezterm.on('gui-startup', function(cmd)
     ploverTab:set_title('Plover')
 
     -- My wiki
-    local wikiTab, wikiPane, wikiWindow = window:spawn_tab({ cwd = os.getenv('USERPROFILE') .. [[\.mywiki]] })
+    local wikiTab, wikiPane, wikiWindow =
+        window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
     wikiPane:send_text('nvim README.md\r\n')
     wikiTab:set_title('Wiki')
 
@@ -221,28 +223,16 @@ wezterm.on('gui-startup', function(cmd)
     --   cwd = os.getenv('USERPROFILE') .. [[\.workspacer]],
     -- }
 
-    -- A workspace for interacting with a local machine that
-    -- runs some docker containners for home automation
-
-    -- local tab, pane, window = mux.spawn_window({
-    --     workspace = workspaces[2],
-    --     cwd = os.getenv('USERPROFILE') .. [[\repos\Freeus.Tools]],
-    --     -- args = { 'ntop' },
-    -- })
-
-    -- local extraTab, extraPane, extraWindow =
-    --     window:spawn_tab({ cwd = [[D:\Wallaby\wearable_post_BelleW_research\PPG_code\2023-01-24_ESP_IDF\i2c_simple\]] })
-
     -- Build project directories as found in the directory ./projects/*.lua
     -- local project_directory_files = wezterm.read_dir(crossplatform.path.join_path(wezterm.config_dir, 'projects'))
-    local project_directory_files = wezterm.read_dir([[C:\Users\dlomax\.config\wezterm\projects]])
+    local project_directory_files = wezterm.read_dir(string.format('%s/projects', wezterm_config_directory))
 
     for i, path in ipairs(project_directory_files) do
         wezterm.log_info(string.format('File number %d = %s', i, path))
 
         local check_for_lua_file = path:match('(projects.*)%.lua')
         if check_for_lua_file ~= nil then
-            check_for_lua_file = check_for_lua_file:gsub('[\\/]','.')
+            check_for_lua_file = check_for_lua_file:gsub('[\\/]', '.')
             print('Running command: require ' .. check_for_lua_file)
             require(check_for_lua_file)
         end
