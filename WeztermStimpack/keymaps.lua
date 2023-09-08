@@ -113,6 +113,8 @@ return {
         action = act.ActivateCommandPalette,
     },
 
+    { key = 'j', mods = 'CTRL|SHIFT', action = act.MoveTabRelative(-1) },
+    { key = 'k', mods = 'CTRL|SHIFT', action = act.MoveTabRelative(1) },
     { key = 'h', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Left') },
     { key = 'l', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Right') },
     { key = 'j', mods = 'CTRL|ALT', action = act.ActivatePaneDirection('Down') },
