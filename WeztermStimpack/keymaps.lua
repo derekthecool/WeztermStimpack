@@ -26,8 +26,8 @@ return {
     },
 
     {
-        key = 'F5',
-        -- mods = 'LEADER',
+        key = ',',
+        mods = 'LEADER',
         action = act.PromptInputLine({
             description = 'Enter new name for tab',
             action = wezterm.action_callback(function(window, pane, line)
@@ -74,22 +74,22 @@ return {
     { key = '±', action = act.ShowLauncherArgs({ flags = 'WORKSPACES' }) },
     { key = '¶', action = act.SwitchWorkspaceRelative(1) },
     { key = '∑', action = act.SwitchWorkspaceRelative(-1) },
+    {
+        key = '1',
+        mods = 'CTRL|SHIFT',
+        action = act.SwitchToWorkspace({
+            name = 'CommandStation',
+        }),
+    },
 
-    -- {
-    --     key = 'F6',
-    --     mods = 'NONE',
-    --     action = wezterm.action_callback(function(win, pane)
-    --         local check = act.ActivateTab(2)
-    --         return check
-    --         -- local check = act.ActivateTab(2) or 'NULL!!'
-    --         -- wezterm.log_warn('Hello from callback!' .. check)
-    --         -- wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
-    --         -- wezterm.log_info('Hello from callback!' .. win:window_id())
-    --         -- win:maximize()
-    --         -- act.ActivateTab(2)()()
-    --         -- require('wezter').action.ActivateTab(2)
-    --     end),
-    -- },
+    {
+        mods = 'CTRL|SHIFT',
+        key = 'i',
+        action = wezterm.action_callback(function(win, pane)
+            wezterm.log_info('Hello from callback!')
+            wezterm.log_info('WindowID:', win:window_id(), 'PaneID:', pane:pane_id())
+        end),
+    },
 
     {
         key = 'a',
@@ -102,7 +102,14 @@ return {
         key = 'o',
         mods = 'CTRL|SHIFT',
         action = act.SwitchToWorkspace({
-            name = 'Development',
+            name = 'FreeusDev',
+        }),
+    },
+    {
+        key = 'e',
+        mods = 'CTRL|SHIFT',
+        action = act.SwitchToWorkspace({
+            name = 'Micron',
         }),
     },
 
@@ -140,11 +147,11 @@ return {
         action = act.ActivatePaneDirection('Up'),
     },
 
-    -- {
-    --     key = 'F9',
-    --     mods = 'NONE',
-    --     action = act.ShowTabNavigator,
-    -- },
+    {
+        key = 'F9',
+        mods = 'CTRL|SHIFT',
+        action = act.ShowTabNavigator,
+    },
 
     {
         key = 'a',

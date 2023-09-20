@@ -9,22 +9,26 @@ local keymap_tables = require('WeztermStimpack.keymap-tables')
 local ssh_domains = require('WeztermStimpack.ssh-domains')
 local crossplatform = require('WeztermStimpack.crossplatform')
 
--- Allow custom tab rename
--- https://github.com/wez/wezterm/issues/522
--- Requires sending special escape sequence and then title from shell
--- Running `rename_wezterm_title "test"` will do it
--- Powershell version ready and working, need to get Linux shell versions too
-wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-    local pane_title = tab.active_pane.title
-    local user_title = tab.active_pane.user_vars.panetitle
-
-    if user_title ~= nil and (#user_title > 0 or pane_title == 'pwsh.exe') then
-        pane_title = user_title
+-- This function returns the suggested title for a tab.
+-- It prefers the title that was set via `tab:set_title()`
+-- or `wezterm cli set-tab-title`, but falls back to the
+-- title of the active pane in that tab.
+local function tab_title(tab_info)
+    local title = tab_info.tab_title
+    -- if the tab title is explicitly set, take that
+    if title and #title > 0 then
+        return title
     end
+    -- Otherwise, use the title from the active pane
+    -- in that tab
+    return tab_info.active_pane.title
+end
 
-    -- ensure that the titles fit in the available space,
-    -- and that we have room for the edges.
-    local pane_title = wezterm.truncate_right(tab.active_pane.title, max_width - 3)
+-- Allow custom tab rename
+-- Early versions did not support this, yay now we have it!
+-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PromptInputLine.html?h=
+wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+    local pane_title = tab_title(tab)
 
     local left_icon = ''
     local right_icon = ''
@@ -211,8 +215,7 @@ wezterm.on('gui-startup', function(cmd)
     ploverTab:set_title('Plover')
 
     -- My wiki
-    local wikiTab, wikiPane, wikiWindow =
-        window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
+    local wikiTab, wikiPane, wikiWindow = window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
     wikiPane:send_text('nvim README.md\r\n')
     wikiTab:set_title('Wiki')
 
