@@ -31,16 +31,16 @@ M.letter_emojis = {
 }
 
 M.battery_levels = {
-    { '', { Foreground = { Color = '#FF0000' } } },
-    { '', { Foreground = { Color = '#FF0000' } } },
-    { '', { Foreground = { Color = '#FF0000' } } },
-    { '', { Foreground = { Color = '#FFFF00' } } },
-    { '', { Foreground = { Color = '#FFFF00' } } },
-    { '', { Foreground = { Color = '#FFFF00' } } },
-    { '', { Foreground = { Color = '#00FF00' } } },
-    { '', { Foreground = { Color = '#00FF00' } } },
-    { '', { Foreground = { Color = '#00FF00' } } },
-    { '', { Foreground = { Color = '#00FF00' } } },
+    { '󰁺', { Foreground = { Color = '#FF0000' } } },
+    { '󰁻', { Foreground = { Color = '#FF0000' } } },
+    { '󰁼', { Foreground = { Color = '#FF0000' } } },
+    { '󰁽', { Foreground = { Color = '#FFFF00' } } },
+    { '󰁾', { Foreground = { Color = '#FFFF00' } } },
+    { '󰁿', { Foreground = { Color = '#FFFF00' } } },
+    { '󰂀', { Foreground = { Color = '#00FF00' } } },
+    { '󰂁', { Foreground = { Color = '#00FF00' } } },
+    { '󰂂', { Foreground = { Color = '#00FF00' } } },
+    { '󰁹', { Foreground = { Color = '#00FF00' } } },
 }
 
 return M
