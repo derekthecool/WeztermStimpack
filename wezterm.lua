@@ -321,6 +321,10 @@ config.launch_menu = {
     { args = { 'pwsh', '-c', [[Get-Content $env:LOCALAPPDATA\Plover\Plover\tapey_tape.txt -Tail 50 -Wait]] } },
     { args = { 'scoop update *' } },
     { args = { 'scoop', 'cleanup', '*' } },
+    {
+        args = { 'nvim.exe' },
+        cwd = [[C:\Users\dlomax\repos\FreeusMicronTools\fm-cli\bin\Debug\net6.0\win10-x64]],
+    },
 }
 
 -- This thing is clever but it is full of issues, this script is all I need
