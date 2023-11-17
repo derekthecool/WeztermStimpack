@@ -1,5 +1,33 @@
 local wezterm = require('wezterm')
 local act = require('wezterm').action
+local mux = wezterm.mux
+
+local char_to_hex = function(c)
+    return string.format('%%%02X', string.byte(c))
+end
+
+local function urlencode(url)
+    if url == nil then
+        return
+    end
+    url = url:gsub('\n', '\r\n')
+    url = url:gsub('([^%w ])', char_to_hex)
+    url = url:gsub(' ', '+')
+    return url
+end
+
+local hex_to_char = function(x)
+    return string.char(tonumber(x, 16))
+end
+
+local urldecode = function(url)
+    if url == nil then
+        return
+    end
+    url = url:gsub('+', ' ')
+    url = url:gsub('%%(%x%x)', hex_to_char)
+    return url
+end
 
 return {
     -- When using steno, shift is not needed. It just seems to be implied because normal keyboard needs a shift
@@ -36,6 +64,40 @@ return {
                 -- Or the actual line of text they wrote
                 if line then
                     window:active_tab():set_title(line)
+                end
+            end),
+        }),
+    },
+    {
+        key = '/',
+        mods = 'LEADER',
+        action = act.PromptInputLine({
+            description = 'Brave search query',
+            action = wezterm.action_callback(function(window, pane, line)
+                -- line will be `nil` if they hit escape without entering anything
+                -- An empty string if they just hit enter
+                -- Or the actual line of text they wrote
+
+                wezterm.log_info(string.format('Hello from brave search query with %s as input', line))
+                wezterm.log_info(window, pane, line)
+                wezterm.log_info(window:mux_window())
+
+                if line then
+                    local command_tab, command_pane, command_window = window:mux_window():spawn_tab({
+                        cwd = os.getenv('LOCALAPPDATA') .. [[\nvim]],
+                    })
+
+                    wezterm.log_info(command_tab)
+                    wezterm.log_info(command_pane)
+                    wezterm.log_info(command_window)
+
+                    command_tab:set_title('carbonyl search')
+                    command_pane:send_text(
+                        string.format(
+                            'podman run --rm -ti fathyb/carbonyl https://search.brave.com/search?q=%s\r\n',
+                            urlencode(line)
+                        )
+                    )
                 end
             end),
         }),

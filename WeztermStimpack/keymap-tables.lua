@@ -104,6 +104,7 @@ return {
         {
             key = 'y',
             mods = 'NONE',
+            -- TODO: (Derek Lomax) 11/14/2023 2:33:13 PM, Use the multiple command more
             action = act.Multiple({ { CopyTo = 'ClipboardAndPrimarySelection' }, { CopyMode = 'Close' } }),
         },
     },

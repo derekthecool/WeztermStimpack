@@ -204,17 +204,8 @@ wezterm.on('gui-startup', function(cmd)
     -- build_pane:send_text('nvim wezterm.lua\r\n')
     tab:set_title('Wezterm')
 
-    -- Neovim tab
-    local nvimTab, nvimPane, nvimWindow = window:spawn_tab({ cwd = os.getenv('LOCALAPPDATA') .. [[\nvim]] })
-    nvimPane:send_text('nvim init.lua\r\n')
-    nvimTab:set_title('Neovim')
-
-    -- Plover
-    local ploverTab, ploverPane, ploverWindow = window:spawn_tab({ cwd = os.getenv('LOCALAPPDATA') .. [[\plover]] })
-    ploverPane:send_text('nvim plover/programming.md\r\n')
-    ploverTab:set_title('Plover')
-
     -- My wiki
+    -- Prefer jumping between mywiki, neovim, wezterm, and Plover inside neovim rather than wezterm tabs
     local wikiTab, wikiPane, wikiWindow = window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
     wikiPane:send_text('nvim README.md\r\n')
     wikiTab:set_title('Wiki')
