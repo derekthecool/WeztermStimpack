@@ -196,19 +196,19 @@ wezterm.on('gui-startup', function(cmd)
     -- Top pane is for the editor, bottom pane is for the build tool
     local tab, build_pane, window = mux.spawn_window({
         workspace = workspaces[1],
-        cwd = wezterm_config_directory,
+        cwd = string.format('%s/.mywiki', wezterm.home_dir),
         args = args,
     })
 
     -- Open neovim to wezterm config
-    -- build_pane:send_text('nvim wezterm.lua\r\n')
-    tab:set_title('Wezterm')
+    build_pane:send_text('nvim README.md\r\n')
+    tab:set_title('CommandStation')
 
-    -- My wiki
-    -- Prefer jumping between mywiki, neovim, wezterm, and Plover inside neovim rather than wezterm tabs
-    local wikiTab, wikiPane, wikiWindow = window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
-    wikiPane:send_text('nvim README.md\r\n')
-    wikiTab:set_title('Wiki')
+    -- -- My wiki
+    -- -- Prefer jumping between mywiki, neovim, wezterm, and Plover inside neovim rather than wezterm tabs
+    -- local wikiTab, wikiPane, wikiWindow = window:spawn_tab({ cwd = string.format('%s/.mywiki', wezterm.home_dir) })
+    -- wikiPane:send_text('nvim README.md\r\n')
+    -- wikiTab:set_title('Wiki')
 
     -- Example of splitting the window
     -- local editor_pane = build_pane:split {
