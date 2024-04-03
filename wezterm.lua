@@ -289,6 +289,9 @@ config.quick_select_alphabet = '1234567890'
 config.quick_select_patterns = {
     -- Windows paths
     '[C-Z]:\\S+',
+
+    -- Command-line args from help print outs
+    '--\\S+',
 }
 
 config.colors = colors
