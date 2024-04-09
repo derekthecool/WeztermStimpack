@@ -232,8 +232,6 @@ wezterm.on('gui-startup', function(cmd)
         end
     end
 
-    require('projects.Freeus')
-
     mux.set_active_workspace(workspaces[1])
 end)
 
