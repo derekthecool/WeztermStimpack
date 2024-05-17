@@ -159,15 +159,18 @@ return {
     ]]
 
     -- Open with all launch options, this is powerful but over the top sometimes
+    -- SKWHEURPG
     { key = '°', action = act.ShowLauncher },
     -- Open with just item set from launch_menu
+    -- SKWHEURP
     { key = '÷', action = act.ShowLauncherArgs({ flags = 'LAUNCH_MENU_ITEMS|FUZZY' }) },
     { key = '»', action = act.ActivateTabRelative(1) },
     { key = '«', action = act.ActivateTabRelative(-1) },
 
     -- Use steno key group SKWH[EU]G to activate these commands
     -- TODO: create non-steno mappings as well
-    { key = '±', action = act.ShowLauncherArgs({ flags = 'WORKSPACES' }) },
+    -- SKWHEUG
+    { key = '±', action = act.ShowLauncherArgs({ flags = 'WORKSPACES|FUZZY', title = 'Switch Workspace' }) },
     { key = '¶', action = act.SwitchWorkspaceRelative(1) },
     { key = '∑', action = act.SwitchWorkspaceRelative(-1) },
     {
