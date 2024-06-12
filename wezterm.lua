@@ -303,6 +303,15 @@ config.disable_default_key_bindings = true
 -- Assign keymaps
 config.keys = keymaps
 
+-- Set mouse mappings
+config.mouse_bindings = {
+    {
+        event = { Down = { streak = 3, button = 'Left' } },
+        action = wezterm.action.SelectTextAtMouseCursor('SemanticZone'),
+        mods = 'NONE',
+    },
+}
+
 -- Assign keymap tables which are special map modal mappings
 config.key_tables = keymap_tables
 

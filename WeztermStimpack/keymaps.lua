@@ -269,6 +269,7 @@ return {
     -- { key = 'F2', mods = 'NONE', action = act.ScrollToPrompt(-1) },
     -- { key = 'F3', mods = 'NONE', action = act.ScrollToPrompt(1) },
     -- { key = 'F4', mods = 'NONE', action = act.SelectTextAtMouseCursor('SemanticZone') },
+    { key = 'b', mods = 'LEADER', action = act.SelectTextAtMouseCursor('SemanticZone') },
     -- -- { key = 'F4', mods = 'NONE', action = act.ScrollToPrompt(-1) },
 
     -- Default key maps
@@ -628,6 +629,7 @@ return {
     { key = 'L',          mods = 'CTRL',           action = act.ShowDebugOverlay },
     { key = 'L',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
     { key = 'l',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
+    { key = 'l',          mods = 'LEADER',         action = act.ShowDebugOverlay },
     { key = 'T',          mods = 'CTRL',           action = act.SpawnTab('CurrentPaneDomain') },
     { key = 'T',          mods = 'SHIFT|CTRL',     action = act.SpawnTab('CurrentPaneDomain') },
     { key = 't',          mods = 'SHIFT|CTRL',     action = act.SpawnTab('CurrentPaneDomain') },
