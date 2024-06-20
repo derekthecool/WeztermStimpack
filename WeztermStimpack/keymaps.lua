@@ -160,7 +160,12 @@ return {
 
     -- Open with all launch options, this is powerful but over the top sometimes
     -- SKWHEURPG
-    { key = '°', action = act.ShowLauncher },
+    -- { key = '°', action = act.ShowLauncher },
+    {
+        key = '°',
+        -- mods = 'SHIFT|ALT',
+        action = act.SpawnTab('CurrentPaneDomain'),
+    },
     -- Open with just item set from launch_menu
     -- SKWHEURP
     { key = '÷', action = act.ShowLauncherArgs({ flags = 'LAUNCH_MENU_ITEMS|FUZZY' }) },
@@ -269,7 +274,7 @@ return {
     -- { key = 'F2', mods = 'NONE', action = act.ScrollToPrompt(-1) },
     -- { key = 'F3', mods = 'NONE', action = act.ScrollToPrompt(1) },
     -- { key = 'F4', mods = 'NONE', action = act.SelectTextAtMouseCursor('SemanticZone') },
-    { key = 'b', mods = 'LEADER', action = act.SelectTextAtMouseCursor('SemanticZone') },
+    { key = 'b',          mods = 'LEADER',         action = act.SelectTextAtMouseCursor('SemanticZone') },
     -- -- { key = 'F4', mods = 'NONE', action = act.ScrollToPrompt(-1) },
 
     -- Default key maps
