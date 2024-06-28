@@ -67,41 +67,48 @@ wezterm.on('bell', function(window, pane)
 end)
 
 wezterm.on('update-right-status', function(window, pane)
-    local cwd_uri = pane:get_current_working_dir() or ''
-    -- wezterm.log_info('cwd_uri : ' .. (cwd_uri or 'cwd_uri is nil'))
-    cwd_uri = cwd_uri:gsub('file:/+', '')
-    cwd_uri = cwd_uri:gsub('%%20', ' ')
-    cwd_uri = cwd_uri:gsub([[C:/Users/%w+/]], '~/')
-    cwd_uri = cwd_uri:gsub('/home/[^/]+/', '~/')
-    cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
-        local output = path_item
+    -- As of 20240127-113634-bbcac864 this function returns a url object and not a string
+    local cwd_uri = pane:get_current_working_dir()
 
-        local MAXIMUM_PATH_LENGTH = 7
-        local START_TRIM_LENGTH = 3
-        local END_TRIM_LENGTH = 3
-        local path_length = #path_item
-        if path_length > MAXIMUM_PATH_LENGTH then
-            output = string.format(
-                '%s↔️%s',
-                path_item:sub(1, START_TRIM_LENGTH),
-                path_item:sub(path_length - END_TRIM_LENGTH, path_length)
-            )
-        end
+    if cwd_uri ~= nil then
+        cwd_uri = cwd_uri.path
+        cwd_uri = cwd_uri:gsub('file:/+', '')
+        cwd_uri = cwd_uri:gsub('%%20', ' ')
+        cwd_uri = cwd_uri:gsub([[/C:/Users/%w+/]], '~/')
+        cwd_uri = cwd_uri:gsub('/home/[^/]+/', '~/')
+        cwd_uri = cwd_uri:gsub('^/([A-Z]:)', '%1')
+        cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
+            local output = path_item
 
-        return output
-    end)
+            local MAXIMUM_PATH_LENGTH = 7
+            local START_TRIM_LENGTH = 3
+            local END_TRIM_LENGTH = 3
+            local path_length = #path_item
+            if path_length > MAXIMUM_PATH_LENGTH then
+                output = string.format(
+                    '%s↔️%s',
+                    path_item:sub(1, START_TRIM_LENGTH),
+                    path_item:sub(path_length - END_TRIM_LENGTH, path_length)
+                )
+            end
 
-    -- Replace common directories with icons
-    cwd_uri = cwd_uri:gsub('~/.config', '🔧')
-    cwd_uri = cwd_uri:gsub('~/AppData/Local', '🐟')
-    cwd_uri = cwd_uri:gsub('~/AppData/Roaming', '🎱')
-    cwd_uri = cwd_uri:gsub('C:', '©️')
+            return output
+        end)
 
-    local letter_emojis = require('WeztermStimpack.icons').letter_emojis
-    cwd_uri = cwd_uri:gsub('D:', function(windows_path_starter)
-        return letter_emojis[windows_path_starter:sub(1, 1)]
-    end)
-    cwd_uri = cwd_uri:gsub('~', '🏠')
+        -- Replace common directories with icons
+        cwd_uri = cwd_uri:gsub('~/.config', '🔧')
+        cwd_uri = cwd_uri:gsub('~/AppData/Local', '🐟')
+        cwd_uri = cwd_uri:gsub('~/AppData/Roaming', '🎱')
+        cwd_uri = cwd_uri:gsub('C:', '©️')
+
+        local letter_emojis = require('WeztermStimpack.icons').letter_emojis
+        cwd_uri = cwd_uri:gsub('D:', function(windows_path_starter)
+            return letter_emojis[windows_path_starter:sub(1, 1)]
+        end)
+        cwd_uri = cwd_uri:gsub('~', '🏠')
+    else
+        wezterm.log_info('cwd_uri from pane:get_current_working_dir() returned nil')
+    end
 
     local battery_levels = require('WeztermStimpack.icons').battery_levels
 
