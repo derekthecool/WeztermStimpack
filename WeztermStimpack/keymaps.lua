@@ -160,14 +160,14 @@ return {
 
     -- Open with all launch options, this is powerful but over the top sometimes
     -- SKWHEURPG
-    -- { key = '°', action = act.ShowLauncher },
+    { key = 'F12', action = act.ShowLauncherArgs({flags = 'DOMAINS|FUZZY'}) },
     {
         key = '°',
         -- mods = 'SHIFT|ALT',
         action = act.SpawnTab('CurrentPaneDomain'),
     },
     -- Open with just item set from launch_menu
-    -- SKWHEURP
+    -- SKWH-RPG
     { key = '÷', action = act.ShowLauncherArgs({ flags = 'LAUNCH_MENU_ITEMS|FUZZY' }) },
     { key = '»', action = act.ActivateTabRelative(1) },
     { key = '«', action = act.ActivateTabRelative(-1) },
