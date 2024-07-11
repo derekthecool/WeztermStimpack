@@ -197,8 +197,6 @@ wezterm.on('gui-startup', function(cmd)
         'CommandStation',
     }
 
-    local wezterm_config_directory = string.format('%s/.config/wezterm', wezterm.home_dir)
-
     -- Set a workspace for coding on a current project
     -- Top pane is for the editor, bottom pane is for the build tool
     local tab, build_pane, window = mux.spawn_window({
@@ -226,7 +224,7 @@ wezterm.on('gui-startup', function(cmd)
 
     -- Build project directories as found in the directory ./projects/*.lua
     -- local project_directory_files = wezterm.read_dir(crossplatform.path.join_path(wezterm.config_dir, 'projects'))
-    local project_directory_files = wezterm.read_dir(string.format('%s/projects', wezterm_config_directory))
+    local project_directory_files = wezterm.read_dir(string.format('%s/projects', wezterm.config_dir))
 
     for i, path in ipairs(project_directory_files) do
         wezterm.log_info(string.format('File number %d = %s', i, path))
@@ -313,8 +311,23 @@ config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 -- Disable all default key maps
 config.disable_default_key_bindings = true
 
+function collect_all_keymap_files()
+    local keymap_files = wezterm.read_dir(string.format('%s/keymaps', wezterm.config_dir))
+
+    for i, path in ipairs(keymap_files) do
+        wezterm.log_info(string.format('File number %d = %s', i, path))
+
+        -- local check_for_lua_file = path:match('(projects.*)%.lua')
+        -- if check_for_lua_file ~= nil then
+        --     check_for_lua_file = check_for_lua_file:gsub('[\\/]', '.')
+        --     print('Running command: require ' .. check_for_lua_file)
+        --     require(check_for_lua_file)
+        -- end
+    end
+end
+
 -- Assign keymaps
-config.keys = keymaps
+-- config.keys = keymaps
 
 -- Set mouse mappings
 config.mouse_bindings = {
