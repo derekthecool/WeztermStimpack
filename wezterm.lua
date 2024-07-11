@@ -4,7 +4,6 @@ local mux = wezterm.mux
 
 -- My configuration WeztermStimpack modules
 local colors = require('WeztermStimpack.colors')
-local keymaps = require('WeztermStimpack.keymaps')
 local keymap_tables = require('WeztermStimpack.keymap-tables')
 local ssh_domains = require('WeztermStimpack.ssh-domains')
 local crossplatform = require('WeztermStimpack.crossplatform')
@@ -66,124 +65,130 @@ wezterm.on('bell', function(window, pane)
     wezterm.log_info('the bell was rung in pane ' .. pane:pane_id() .. '!')
 end)
 
-wezterm.on('update-right-status', function(window, pane)
-    -- As of 20240127-113634-bbcac864 this function returns a url object and not a string
-    local cwd_uri = pane:get_current_working_dir()
-
-    if cwd_uri ~= nil then
-        cwd_uri = cwd_uri.path
-        cwd_uri = cwd_uri:gsub('file:/+', '')
-        cwd_uri = cwd_uri:gsub('%%20', ' ')
-        cwd_uri = cwd_uri:gsub([[/C:/Users/%w+/]], '~/')
-        cwd_uri = cwd_uri:gsub('/home/[^/]+/', '~/')
-        cwd_uri = cwd_uri:gsub('^/([A-Z]:)', '%1')
-        cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
-            local output = path_item
-
-            local MAXIMUM_PATH_LENGTH = 7
-            local START_TRIM_LENGTH = 3
-            local END_TRIM_LENGTH = 3
-            local path_length = #path_item
-            if path_length > MAXIMUM_PATH_LENGTH then
-                output = string.format(
-                    '%s↔️%s',
-                    path_item:sub(1, START_TRIM_LENGTH),
-                    path_item:sub(path_length - END_TRIM_LENGTH, path_length)
-                )
-            end
-
-            return output
-        end)
-
-        -- Replace common directories with icons
-        cwd_uri = cwd_uri:gsub('~/.config', '🔧')
-        cwd_uri = cwd_uri:gsub('~/AppData/Local', '🐟')
-        cwd_uri = cwd_uri:gsub('~/AppData/Roaming', '🎱')
-        cwd_uri = cwd_uri:gsub('C:', '©️')
-
-        local letter_emojis = require('WeztermStimpack.icons').letter_emojis
-        cwd_uri = cwd_uri:gsub('D:', function(windows_path_starter)
-            return letter_emojis[windows_path_starter:sub(1, 1)]
-        end)
-        cwd_uri = cwd_uri:gsub('~', '🏠')
-    else
-        wezterm.log_info('cwd_uri from pane:get_current_working_dir() returned nil')
-    end
-
-    local battery_levels = require('WeztermStimpack.icons').battery_levels
-
-    local bat = ''
-    local charge_percent_index = 1
-    for _, b in ipairs(wezterm.battery_info()) do
-        local charge_percent = b.state_of_charge * 100
-        charge_percent_index = math.floor(charge_percent / 10)
-        bat = string.format('%s %0.0f%%', battery_levels[charge_percent_index][1], charge_percent)
-    end
-
-    local leader = ''
-    if window:leader_is_active() then
-        leader = ' [L] '
-    end
-
+-- wezterm.on('update-right-status', function(window, pane)
+--     -- As of 20240127-113634-bbcac864 this function returns a url object and not a string
+--     local cwd_uri = pane:get_current_working_dir()
+--
+--     if cwd_uri ~= nil then
+--         cwd_uri = cwd_uri.path
+--         cwd_uri = cwd_uri:gsub('file:/+', '')
+--         cwd_uri = cwd_uri:gsub('%%20', ' ')
+--         cwd_uri = cwd_uri:gsub([[/C:/Users/%w+/]], '~/')
+--         cwd_uri = cwd_uri:gsub('/home/[^/]+/', '~/')
+--         cwd_uri = cwd_uri:gsub('^/([A-Z]:)', '%1')
+--         cwd_uri = cwd_uri:gsub('([^/]+)', function(path_item, two)
+--             local output = path_item
+--
+--             local MAXIMUM_PATH_LENGTH = 7
+--             local START_TRIM_LENGTH = 3
+--             local END_TRIM_LENGTH = 3
+--             local path_length = #path_item
+--             if path_length > MAXIMUM_PATH_LENGTH then
+--                 output = string.format(
+--                     '%s↔️%s',
+--                     path_item:sub(1, START_TRIM_LENGTH),
+--                     path_item:sub(path_length - END_TRIM_LENGTH, path_length)
+--                 )
+--             end
+--
+--             return output
+--         end)
+--
+--         -- Replace common directories with icons
+--         cwd_uri = cwd_uri:gsub('~/.config', '🔧')
+--         cwd_uri = cwd_uri:gsub('~/AppData/Local', '🐟')
+--         cwd_uri = cwd_uri:gsub('~/AppData/Roaming', '🎱')
+--         cwd_uri = cwd_uri:gsub('C:', '©️')
+--
+--         local letter_emojis = require('WeztermStimpack.icons').letter_emojis
+--         cwd_uri = cwd_uri:gsub('D:', function(windows_path_starter)
+--             return letter_emojis[windows_path_starter:sub(1, 1)]
+--         end)
+--         cwd_uri = cwd_uri:gsub('~', '🏠')
+--     else
+--         wezterm.log_info('cwd_uri from pane:get_current_working_dir() returned nil')
+--         cwd_uri = ''
+--     end
+--
+--         cwd_uri = ''
+--
+--     local battery_levels = require('WeztermStimpack.icons').battery_levels
+--
+--     local bat = ''
+--     local charge_percent_index = 1
+--     for _, b in ipairs(wezterm.battery_info()) do
+--         local charge_percent = b.state_of_charge * 100
+--         charge_percent_index = math.floor(charge_percent / 10)
+--         bat = string.format('%s %0.0f%%', battery_levels[charge_percent_index][1], charge_percent)
+--     end
+--
+--     local leader = ''
+--     if window:leader_is_active() then
+--         leader = ' [L] '
+--     end
+--
     -- TODO: can the background here be made transparent??
-    local separator_icon_background = { Foreground = { Color = '#0000ff' } }
-    local separator_icon = { Text = ' ፨ ' }
+--     local separator_icon_background = { Foreground = { Color = '#0000ff' } }
+--     local separator_icon = { Text = ' ፨ ' }
+--
+--     local workspace_color = '#3d8fd1'
+--
+--     window:set_right_status(wezterm.format({
+--
+--         -- Current terminal working directory. Requires OSC7 integration.
+--         'ResetAttributes',
+--         { Foreground = { Color = workspace_color } },
+--         { Text = '' },
+--         { Background = { Color = workspace_color } },
+--         { Foreground = { Color = '#053c8c' } },
+--         { Text = cwd_uri or 'COW' },
+--         'ResetAttributes',
+--         { Foreground = { Color = workspace_color } },
+--         { Text = '' },
+--         'ResetAttributes',
+--
+--         -- Leader symbol
+--         { Foreground = { Color = '#053c8c' } },
+--         { Background = { Color = '#c08b30' } },
+--         { Text = leader },
+--         'ResetAttributes',
+--
+--         -- Separator
+--         separator_icon_background,
+--         separator_icon,
+--         'ResetAttributes',
+--
+--         -- Active workspace
+--         { Foreground = { Color = workspace_color } },
+--         { Text = '' },
+--         { Background = { Color = workspace_color } },
+--         { Foreground = { Color = '#053c8c' } },
+--         { Text = window:active_workspace() },
+--         'ResetAttributes',
+--         { Foreground = { Color = workspace_color } },
+--         { Text = '' },
+--         'ResetAttributes',
+--
+--         -- Battery
+--         separator_icon_background,
+--         separator_icon,
+--         battery_levels[charge_percent_index][2],
+--         { Text = bat },
+--         'ResetAttributes',
+--
+--         -- Separator
+--         separator_icon_background,
+--         separator_icon,
+--         'ResetAttributes',
+--     }))
+-- end)
 
-    local workspace_color = '#3d8fd1'
-
-    window:set_right_status(wezterm.format({
-
-        -- Current terminal working directory. Requires OSC7 integration.
-        'ResetAttributes',
-        { Foreground = { Color = workspace_color } },
-        { Text = '' },
-        { Background = { Color = workspace_color } },
-        { Foreground = { Color = '#053c8c' } },
-        { Text = cwd_uri },
-        'ResetAttributes',
-        { Foreground = { Color = workspace_color } },
-        { Text = '' },
-        'ResetAttributes',
-
-        -- Leader symbol
-        { Foreground = { Color = '#053c8c' } },
-        { Background = { Color = '#c08b30' } },
-        { Text = leader },
-        'ResetAttributes',
-
-        -- Separator
-        separator_icon_background,
-        separator_icon,
-        'ResetAttributes',
-
-        -- Active workspace
-        { Foreground = { Color = workspace_color } },
-        { Text = '' },
-        { Background = { Color = workspace_color } },
-        { Foreground = { Color = '#053c8c' } },
-        { Text = window:active_workspace() },
-        'ResetAttributes',
-        { Foreground = { Color = workspace_color } },
-        { Text = '' },
-        'ResetAttributes',
-
-        -- Battery
-        separator_icon_background,
-        separator_icon,
-        battery_levels[charge_percent_index][2],
-        { Text = bat },
-        'ResetAttributes',
-
-        -- Separator
-        separator_icon_background,
-        separator_icon,
-        'ResetAttributes',
-    }))
-end)
 
 -- TODO: not sure if this works
 wezterm.on('window-config-reloaded', function(window, pane)
     window:toast_notification('wezterm', 'configuration reloaded!', nil, 4000)
+
+    -- window:toast_notification('wezterm', string.format('keymap count: %d', require('WeztermStimpack.keymaps')), nil, 4000)
 end)
 
 -- Build my default set of sessions, tabs, etc.
@@ -311,23 +316,32 @@ config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 -- Disable all default key maps
 config.disable_default_key_bindings = true
 
-function collect_all_keymap_files()
-    local keymap_files = wezterm.read_dir(string.format('%s/keymaps', wezterm.config_dir))
 
-    for i, path in ipairs(keymap_files) do
-        wezterm.log_info(string.format('File number %d = %s', i, path))
+-- local keymaps = require('WeztermStimpack.keymaps')
 
-        -- local check_for_lua_file = path:match('(projects.*)%.lua')
-        -- if check_for_lua_file ~= nil then
-        --     check_for_lua_file = check_for_lua_file:gsub('[\\/]', '.')
-        --     print('Running command: require ' .. check_for_lua_file)
-        --     require(check_for_lua_file)
-        -- end
-    end
+    -- wezterm.log_info(keymaps)
+
+
+local keymap_dir = string.format('%s/WeztermStimpack/keymaps', wezterm.config_dir)
+print(keymap_dir)
+for _, keymap_file in ipairs(wezterm.read_dir(keymap_dir)) do
+    local required_keymap_file = load(keymap_file)
+  wezterm.log_info('entry: ' .. keymap_file)
+  local length = -1
+  -- if required_keymap_file then
+  --     length = #required_keymap_file
+  -- end
+  -- wezterm.log_info(string.format('File: %s, type: %s, table length: %d', keymap_file, type(required_keymap_file) or nil, (#required_keymap_file or -1)))
 end
+
+
+
+
 
 -- Assign keymaps
 -- config.keys = keymaps
+config.keys = require('WeztermStimpack.keymaps.keymaps')
+
 
 -- Set mouse mappings
 config.mouse_bindings = {
