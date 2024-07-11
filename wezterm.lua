@@ -127,7 +127,7 @@ end)
 --         leader = ' [L] '
 --     end
 --
-    -- TODO: can the background here be made transparent??
+-- TODO: can the background here be made transparent??
 --     local separator_icon_background = { Foreground = { Color = '#0000ff' } }
 --     local separator_icon = { Text = ' ፨ ' }
 --
@@ -183,12 +183,9 @@ end)
 --     }))
 -- end)
 
-
 -- TODO: not sure if this works
 wezterm.on('window-config-reloaded', function(window, pane)
     window:toast_notification('wezterm', 'configuration reloaded!', nil, 4000)
-
-    -- window:toast_notification('wezterm', string.format('keymap count: %d', require('WeztermStimpack.keymaps')), nil, 4000)
 end)
 
 -- Build my default set of sessions, tabs, etc.
@@ -316,32 +313,59 @@ config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 -- Disable all default key maps
 config.disable_default_key_bindings = true
 
-
 -- local keymaps = require('WeztermStimpack.keymaps')
 
-    -- wezterm.log_info(keymaps)
-
+-- wezterm.log_info(keymaps)
 
 local keymap_dir = string.format('%s/WeztermStimpack/keymaps', wezterm.config_dir)
-print(keymap_dir)
+wezterm.log_info(string.format('Wezterm keymap directory file path: %s', keymap_dir))
+
+local full_keymap_table = {}
+
 for _, keymap_file in ipairs(wezterm.read_dir(keymap_dir)) do
-    local required_keymap_file = load(keymap_file)
-  wezterm.log_info('entry: ' .. keymap_file)
-  local length = -1
-  -- if required_keymap_file then
-  --     length = #required_keymap_file
-  -- end
-  -- wezterm.log_info(string.format('File: %s, type: %s, table length: %d', keymap_file, type(required_keymap_file) or nil, (#required_keymap_file or -1)))
+    -- local required_keymap_file = load(keymap_file)
+    -- wezterm.log_info('entry: ' .. keymap_file)
+    -- local length = -1
+
+    local keymap_match = keymap_file:match('(WeztermStimpack.*)%.lua')
+    if keymap_match ~= nil then
+        keymap_match = keymap_match:gsub('[\\/]', '.')
+        print('Running command: require ' .. keymap_match)
+        local sourced_keymap_file = require(keymap_match)
+
+        if sourced_keymap_file and type(sourced_keymap_file) == 'table' then
+            wezterm.log_info(
+                string.format(
+                    'Valid keymap file found containing: %d items, path: %s',
+                    #sourced_keymap_file,
+                    keymap_file
+                )
+            )
+
+            for _, keymap_item in pairs(sourced_keymap_file) do
+                table.insert(full_keymap_table, keymap_item)
+            end
+
+            wezterm.log_info(string.format('full_keymap_table now has: %d items', #full_keymap_table))
+        else
+            wezterm.log_info(
+                string.format('The file: %s, did not return a table - this will not be sourced', sourced_keymap_file)
+            )
+        end
+    end
+
+    -- if required_keymap_file then
+    --     length = #required_keymap_file
+    -- end
+    -- wezterm.log_info(string.format('File: %s, type: %s, table length: %d', keymap_file, type(required_keymap_file) or nil, (#required_keymap_file or -1)))
 end
 
-
-
-
-
 -- Assign keymaps
--- config.keys = keymaps
-config.keys = require('WeztermStimpack.keymaps.keymaps')
-
+if type(full_keymap_table) == 'table' and #full_keymap_table > 0 then
+    -- config.keys = keymaps
+    -- config.keys = require('WeztermStimpack.keymaps.keymaps')
+    config.keys = full_keymap_table
+end
 
 -- Set mouse mappings
 config.mouse_bindings = {

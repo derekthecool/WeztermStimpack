@@ -88,21 +88,6 @@ return {
     },
 
     {
-        key = ',',
-        mods = 'LEADER',
-        action = act.PromptInputLine({
-            description = 'Enter new name for tab',
-            action = wezterm.action_callback(function(window, pane, line)
-                -- line will be `nil` if they hit escape without entering anything
-                -- An empty string if they just hit enter
-                -- Or the actual line of text they wrote
-                if line then
-                    window:active_tab():set_title(line)
-                end
-            end),
-        }),
-    },
-    {
         key = '/',
         mods = 'LEADER',
         action = act.PromptInputLine({
@@ -632,6 +617,7 @@ return {
     { key = 'f',          mods = 'SHIFT|CTRL',     action = act.Search('CurrentSelectionOrEmptyString') },
     { key = 'f',          mods = 'SUPER',          action = act.Search('CurrentSelectionOrEmptyString') },
     { key = 'L',          mods = 'CTRL',           action = act.ShowDebugOverlay },
+    { key = 'l',          mods = 'LEADER',           action = act.ShowDebugOverlay },
     { key = 'L',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
     { key = 'l',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
     { key = 'l',          mods = 'LEADER',         action = act.ShowDebugOverlay },
