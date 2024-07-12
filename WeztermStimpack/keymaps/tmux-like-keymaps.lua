@@ -6,7 +6,7 @@ local act = require('wezterm').action
 local mux = wezterm.mux
 
 return {
-    -- Move between tabs
+    -- Move between wezterm tabs (tmux windows)
     { key = 'p', mods = 'LEADER', action = act.ActivateTabRelative(-1) },
     { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
     { key = '0', mods = 'LEADER', action = act.ActivateTab(0) },
@@ -20,6 +20,9 @@ return {
     { key = '8', mods = 'LEADER', action = act.ActivateTab(8) },
     { key = '9', mods = 'LEADER', action = act.ActivateTab(9) },
     { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
+
+    -- Close current tab (tmux window)
+    { key = '&', mods = 'LEADER',  action = act.CloseCurrentTab({ confirm = true }) },
 
     {
         key = ',',
