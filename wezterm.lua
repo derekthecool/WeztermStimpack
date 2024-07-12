@@ -247,7 +247,16 @@ local config = {}
 config.window_close_confirmation = 'NeverPrompt'
 
 config.font_size = 14
-config.font = wezterm.font('JetBrains Mono')
+-- config.font = wezterm.font('JetBrains Mono')
+config.fonf = wezterm.font_with_fallback {
+    'Hack Nerd Font Mono',
+    { family = 'Hack Nerd Font Mono', weight = 'Regular' },
+    { family = 'Hack Nerd Font' },
+    { family = 'JetBrains Mono', weight = 'Bold' },
+    { family = 'JetBrains Mono', scale = 1.5 },
+    { family = 'Microsoft YaHei', scale = 1.5 },
+}
+
 -- Enable ligatures
 config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
 
