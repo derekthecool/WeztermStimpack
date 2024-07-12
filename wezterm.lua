@@ -317,14 +317,10 @@ config.quick_select_patterns = {
 config.colors = colors
 
 -- Set leader key
-config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
 
 -- Disable all default key maps
 config.disable_default_key_bindings = true
-
--- local keymaps = require('WeztermStimpack.keymaps')
-
--- wezterm.log_info(keymaps)
 
 local keymap_dir = string.format('%s/WeztermStimpack/keymaps', wezterm.config_dir)
 wezterm.log_info(string.format('Wezterm keymap directory file path: %s', keymap_dir))
@@ -332,10 +328,6 @@ wezterm.log_info(string.format('Wezterm keymap directory file path: %s', keymap_
 local full_keymap_table = {}
 
 for _, keymap_file in ipairs(wezterm.read_dir(keymap_dir)) do
-    -- local required_keymap_file = load(keymap_file)
-    -- wezterm.log_info('entry: ' .. keymap_file)
-    -- local length = -1
-
     local keymap_match = keymap_file:match('(WeztermStimpack.*)%.lua')
     if keymap_match ~= nil then
         keymap_match = keymap_match:gsub('[\\/]', '.')
@@ -362,17 +354,10 @@ for _, keymap_file in ipairs(wezterm.read_dir(keymap_dir)) do
             )
         end
     end
-
-    -- if required_keymap_file then
-    --     length = #required_keymap_file
-    -- end
-    -- wezterm.log_info(string.format('File: %s, type: %s, table length: %d', keymap_file, type(required_keymap_file) or nil, (#required_keymap_file or -1)))
 end
 
 -- Assign keymaps
 if type(full_keymap_table) == 'table' and #full_keymap_table > 0 then
-    -- config.keys = keymaps
-    -- config.keys = require('WeztermStimpack.keymaps.keymaps')
     config.keys = full_keymap_table
 end
 
