@@ -386,30 +386,6 @@ config.launch_menu = {
     },
 }
 
--- This thing is clever but it is full of issues, this script is all I need
--- & 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1'
---
--- if wezngterm.target_triple == 'x86_64-pc-windows-msvc' then
---     table.insert(config.launch_menu, {
---         label = 'PowerShell',
---         args = { 'powershell.exe', '-NoLogo' },
---     })
---
---     -- Find installed visual studio version(s) and add their compilation
---     -- environment command prompts to the menu
---     for _, vsvers in ipairs(wezterm.glob('Microsoft Visual Studio/20*', 'C:/Program Files')) do
---         local year = vsvers:gsub('Microsoft Visual Studio/', '')
---         table.insert(config.launch_menu, {
---             label = 'x64 Native Tools VS ' .. year,
---             args = {
---                 'cmd.exe',
---                 '/k',
---                 'C:/Program Files/' .. vsvers .. '/BuildTools/VC/Auxiliary/Build/vcvars64.bat',
---             },
---         })
---     end
--- end
-
 -- TODO: perhaps need to make this apply with windows only
 config.quote_dropped_files = 'WindowsAlwaysQuoted'
 
