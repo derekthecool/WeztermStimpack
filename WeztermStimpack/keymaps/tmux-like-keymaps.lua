@@ -22,7 +22,7 @@ return {
     { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
 
     -- Close current tab (tmux window)
-    { key = '&', mods = 'LEADER',  action = act.CloseCurrentTab({ confirm = true }) },
+    { key = '&', mods = 'LEADER', action = act.CloseCurrentTab({ confirm = true }) },
 
     {
         key = ',',
@@ -39,4 +39,55 @@ return {
             end),
         }),
     },
+
+    -- Panes
+
+    -- Move pane to now window leader + !
+    -- Rotate/move pane location leader + [ctrl + o]
+    -- Select pane leader + up
+    -- Select pane leader + left
+    -- Select pane leader + right
+    -- Select pane leader + down
+    -- Move to previous pane leader + ;
+    -- Search for pane leader + f
+    -- Kill active pane leader + x
+    -- zoom current pane leader + z
+    -- swap active pane with pane above leader + {
+    -- swap active pane with pane below leader + }
+    -- Spread panes out evenly leader + e
+    -- Toggle the marked pane leader + m
+    -- Select next pane leader + o
+    -- Select previous pane leader + p
+    -- Display pane numbers and allow user to jump to it by typing the number leader + q
+    { key = 'q', mods = 'LEADER', action = act.PaneSelect({ alphabet = '', mode = 'Activate' }) },
+
+    -- Sessions (this is murky grounds here)
+    -- choose a session from a list leader + s
+    -- Rename the current session leader + $
+    -- Switch to previous client leader + (
+    -- Switch to next client leader + )
+    -- Switch to last client leader + l
+    -- Detach the current client leader + d
+    -- Suspend the current client leader + [control + z]
+    -- Redraw the current client leader + r
+
+    -- Layouts
+    -- Alt mappings are incompatible with my workspacer/awesomewm
+    -- Set an even horizontal layout leader + [alt + 1]
+    -- Set an even vertical layout leader + [alt + 2]
+    -- Set an even main horizontal layout leader + [alt + 3]
+    -- Set an even main vertical layout leader + [alt + 4]
+    -- Set an even tiled layout leader + [alt + 5]
+    -- Resize the pane up by 5 leader + [alt + up]
+    -- Resize the pane down by 5 leader + [alt + down]
+    -- Resize the pane left by 5 leader + [alt + left]
+    -- Resize the pane right by 5 leader + [alt + right]
+    -- Resize the pane up leader + [control + up]
+    -- Resize the pane down leader + [control + down]
+    -- Resize the pane left leader + [control + left]
+    -- Resize the pane right leader + [control + right]
+    --
+    -- This one is very, very cool!
+    -- Next layout leader + space
+
 }
