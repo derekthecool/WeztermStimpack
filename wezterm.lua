@@ -249,11 +249,6 @@ config.window_close_confirmation = 'NeverPrompt'
 config.font_size = 14
 config.font_dirs = { 'fonts' }
 config.font_locator = 'ConfigDirsOnly'
--- config.font = wezterm.font('T')
-
--- config.underline_position = -4
--- config.allow_square_glyphs_to_overflow_width = 'Never'
--- config.anti_alias_custom_block_glyphs = false
 
 -- config.font = wezterm.font('JetBrains Mono')
 config.font = wezterm.font_with_fallback {
