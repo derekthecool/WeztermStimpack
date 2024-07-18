@@ -70,6 +70,7 @@ wezterm.on('update-right-status', function(window, pane)
     local cwd_uri = pane:get_current_working_dir()
 
     if cwd_uri ~= nil then
+        wezterm.log_info(string.format('Initial value for cwd_url: %s', cwd_uri))
         cwd_uri = cwd_uri.path
         cwd_uri = cwd_uri:gsub('file:/+', '')
         cwd_uri = cwd_uri:gsub('%%20', ' ')
