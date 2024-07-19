@@ -3,11 +3,9 @@ local wezterm = require('wezterm')
 local mux = wezterm.mux
 
 -- My configuration WeztermStimpack modules
-local colors = require('WeztermStimpack.colors')
 local keymap_tables = require('WeztermStimpack.keymap-tables')
 local ssh_domains = require('WeztermStimpack.ssh-domains')
 local crossplatform = require('WeztermStimpack.crossplatform')
-require('WeztermStimpack.tab-format')
 require('WeztermStimpack.right-status-format')
 
 -- Build my default set of sessions, tabs, etc.
@@ -68,22 +66,15 @@ local config = {}
 
 require('WeztermStimpack.bell-settings').init(config)
 require('WeztermStimpack.font-settings').init(config)
-
+require('WeztermStimpack.tab-format').init(config)
+config.colors = require('WeztermStimpack.colors')
 config.window_close_confirmation = 'NeverPrompt'
-
 
 -- Use the same color scheme as neovim
 config.color_scheme = 'Atelier Sulphurpool (base16)'
 
 -- Set different default shell
 config.default_prog = { 'pwsh' }
-
--- Tab bar config
-config.use_fancy_tab_bar = false
-config.show_new_tab_button_in_tab_bar = false
-config.show_tab_index_in_tab_bar = false
-config.tab_bar_at_bottom = true
-config.switch_to_last_active_tab_when_closing_tab = true
 
 -- Give me my precious terminal space back by having no padding and no title bar
 config.window_decorations = 'RESIZE'
@@ -117,8 +108,6 @@ config.quick_select_patterns = {
     -- ICCID numbers
     [[\b\d{20}\b]],
 }
-
-config.colors = colors
 
 -- Set leader key
 config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }

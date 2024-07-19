@@ -1,6 +1,8 @@
 local wezterm = require('wezterm')
 local colors = require('WeztermStimpack.colors')
 
+local M = {}
+
 -- This function returns the suggested title for a tab.
 -- It prefers the title that was set via `tab:set_title()`
 -- or `wezterm cli set-tab-title`, but falls back to the
@@ -52,3 +54,14 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
         { Text = ' ' },
     }
 end)
+
+M.init = function(config)
+    -- Tab bar config
+    config.use_fancy_tab_bar = false
+    config.show_new_tab_button_in_tab_bar = false
+    config.show_tab_index_in_tab_bar = false
+    config.tab_bar_at_bottom = true
+    config.switch_to_last_active_tab_when_closing_tab = true
+end
+
+return M
