@@ -10,11 +10,6 @@ local crossplatform = require('WeztermStimpack.crossplatform')
 require('WeztermStimpack.tab-format')
 require('WeztermStimpack.right-status-format')
 
-wezterm.on('bell', function(window, pane)
-    -- TODO: change highlight of tab if not current like tmux
-    wezterm.log_info('the bell was rung in pane ' .. pane:pane_id() .. '!')
-end)
-
 -- Build my default set of sessions, tabs, etc.
 wezterm.on('gui-startup', function(cmd)
     local args = {}
@@ -71,6 +66,8 @@ end)
 
 local config = {}
 
+require('WeztermStimpack.bell-settings').init(config)
+
 config.window_close_confirmation = 'NeverPrompt'
 
 config.font_size = 14
@@ -106,14 +103,6 @@ config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 
 -- Slightly translucent background
 config.window_background_opacity = 0.72
-
-config.audible_bell = 'Disabled'
-config.visual_bell = {
-    fade_in_function = 'EaseIn',
-    fade_in_duration_ms = 150,
-    fade_out_function = 'EaseOut',
-    fade_out_duration_ms = 150,
-}
 
 -- exit_behavior can be Close, Hold, CloseOnCleanExit, Close
 -- Hold is the most forgiving as it does not autoshut down and helps detect errors
