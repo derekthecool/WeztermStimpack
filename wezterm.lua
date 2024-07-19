@@ -7,58 +7,7 @@ local colors = require('WeztermStimpack.colors')
 local keymap_tables = require('WeztermStimpack.keymap-tables')
 local ssh_domains = require('WeztermStimpack.ssh-domains')
 local crossplatform = require('WeztermStimpack.crossplatform')
-
--- This function returns the suggested title for a tab.
--- It prefers the title that was set via `tab:set_title()`
--- or `wezterm cli set-tab-title`, but falls back to the
--- title of the active pane in that tab.
-local function tab_title(tab_info)
-    local title = tab_info.tab_title
-    -- if the tab title is explicitly set, take that
-    if title and #title > 0 then
-        return title
-    end
-    -- Otherwise, use the title from the active pane
-    -- in that tab
-    return tab_info.active_pane.title
-end
-
--- Allow custom tab rename
--- Early versions did not support this, yay now we have it!
--- https://wezfurlong.org/wezterm/config/lua/keyassignment/PromptInputLine.html?h=
-wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-    local pane_title = tab_title(tab)
-
-    local left_icon = ''
-    local right_icon = ''
-
-    local edge_background = '#0000ff'
-    local edge_foreground = '#ff0fff'
-
-    local full_background = require('WeztermStimpack.colors').tab_bar.background
-    local background = require('WeztermStimpack.colors').tab_bar.inactive_tab.bg_color
-    local foreground = background
-
-    if tab.is_active then
-        background = full_background
-    elseif hover then
-        background = require('WeztermStimpack.colors').tab_bar.inactive_tab_hover.bg_color
-    end
-
-    return {
-        { Background = { Color = full_background } },
-        { Foreground = { Color = background } },
-        { Text = left_icon },
-        'ResetAttributes',
-        { Text = pane_title },
-        { Background = { Color = full_background } },
-        'ResetAttributes',
-        { Background = { Color = full_background } },
-        { Foreground = { Color = background } },
-        { Text = right_icon },
-        { Text = ' ' },
-    }
-end)
+require('WeztermStimpack.tab-format')
 
 wezterm.on('bell', function(window, pane)
     -- TODO: change highlight of tab if not current like tmux
@@ -182,11 +131,6 @@ wezterm.on('update-right-status', function(window, pane)
         separator_icon,
         'ResetAttributes',
     }))
-end)
-
--- TODO: not sure if this works
-wezterm.on('window-config-reloaded', function(window, pane)
-    window:toast_notification('wezterm', 'configuration reloaded!', nil, 4000)
 end)
 
 -- Build my default set of sessions, tabs, etc.
