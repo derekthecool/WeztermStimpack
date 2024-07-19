@@ -188,33 +188,8 @@ if type(full_keymap_table) == 'table' and #full_keymap_table > 0 then
     config.keys = full_keymap_table
 end
 
--- Set mouse mappings
-config.mouse_bindings = {
-    {
-        event = { Down = { streak = 3, button = 'Left' } },
-        action = wezterm.action.SelectTextAtMouseCursor('SemanticZone'),
-        mods = 'NONE',
-    },
-}
-
 -- Assign keymap tables which are special map modal mappings
 config.key_tables = keymap_tables
-
--- TODO: add more items here to launch
-config.launch_menu = {
-    { args = { 'termscp' } },
-    { args = { 'btop' } },
-    { args = { 'pwsh', '-c', [[Get-Content $env:LOCALAPPDATA\Plover\Plover\tapey_tape.txt -Tail 50 -Wait]] } },
-    { args = { 'scoop update *' } },
-    { args = { 'scoop', 'cleanup', '*' } },
-    {
-        args = { 'nvim.exe' },
-        cwd = [[C:\Users\dlomax\repos\FreeusMicronTools\fm-cli\bin\Debug\net6.0\win10-x64]],
-    },
-}
-
--- TODO: perhaps need to make this apply with windows only
-config.quote_dropped_files = 'WindowsAlwaysQuoted'
 
 config.show_update_window = false
 
