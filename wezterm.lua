@@ -4,7 +4,6 @@ local mux = wezterm.mux
 
 -- My configuration WeztermStimpack modules
 local keymap_tables = require('WeztermStimpack.keymap-tables')
-local ssh_domains = require('WeztermStimpack.ssh-domains')
 local crossplatform = require('WeztermStimpack.crossplatform')
 require('WeztermStimpack.right-status-format')
 
@@ -67,11 +66,14 @@ local config = {}
 require('WeztermStimpack.bell-settings').init(config)
 require('WeztermStimpack.font-settings').init(config)
 require('WeztermStimpack.tab-format').init(config)
+config.ssh_domains = require('WeztermStimpack.ssh-domains')
 config.colors = require('WeztermStimpack.colors')
 config.window_close_confirmation = 'NeverPrompt'
 
 -- Use the same color scheme as neovim
 config.color_scheme = 'Atelier Sulphurpool (base16)'
+-- Slightly translucent background
+config.window_background_opacity = 0.72
 
 -- Set different default shell
 config.default_prog = { 'pwsh' }
@@ -80,34 +82,12 @@ config.default_prog = { 'pwsh' }
 config.window_decorations = 'RESIZE'
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 
--- Slightly translucent background
-config.window_background_opacity = 0.72
-
 -- exit_behavior can be Close, Hold, CloseOnCleanExit, Close
--- Hold is the most forgiving as it does not autoshut down and helps detect errors
--- Hold also requires a manual closing of the tab or pane
 config.exit_behavior = 'CloseOnCleanExit'
-
-config.ssh_domains = ssh_domains
 
 -- Easy picks for steno keyboard
 config.quick_select_alphabet = '1234567890'
-
--- Add to list of quick select patterns
--- Not limited to lua matching, we can use rust regex wahoo!
-config.quick_select_patterns = {
-    -- Windows paths
-    '[C-Z]:\\S+',
-
-    -- Command-line args from help print outs
-    '--\\S+',
-
-    -- IMEI numbers
-    [[\b\d{15}\b]],
-
-    -- ICCID numbers
-    [[\b\d{20}\b]],
-}
+config.quick_select_patterns = require('WeztermStimpack.quick-select-patterns')
 
 -- Set leader key
 config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
