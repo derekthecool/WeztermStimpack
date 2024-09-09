@@ -23,7 +23,7 @@ config.default_prog = { 'pwsh' }
 config.exit_behavior = 'CloseOnCleanExit'
 
 -- Easy picks for steno keyboard
-config.quick_select_alphabet = '1234567890'
+config.quick_select_alphabet = 'abcdefghijklmnopqrstuvwxy'
 config.quick_select_patterns = require('WeztermStimpack.quick-select-patterns')
 
 -- Set leader, disable defaults, load keymap files
