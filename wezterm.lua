@@ -10,6 +10,7 @@ require('WeztermStimpack.tab-format').init(config)
 config.ssh_domains = require('WeztermStimpack.ssh-domains')
 config.colors = require('WeztermStimpack.colors')
 config.window_close_confirmation = 'NeverPrompt'
+config.scrollback_lines = 5000
 
 -- Visual settings
 config.color_scheme = 'Atelier Sulphurpool (base16)'                 -- Same as my neovim config
