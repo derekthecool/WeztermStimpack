@@ -30,4 +30,11 @@ return {
         multiplexing = 'WezTerm',
         -- connect_automatically = true,
     },
+    {
+        name = 'home.computer',
+        remote_address = '192.168.1.28',
+        username = 'dlomax',
+        multiplexing = 'WezTerm',
+        -- connect_automatically = true,
+    },
 }

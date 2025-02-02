@@ -147,6 +147,16 @@ return {
     -- SKWHEURPG
     { key = 'F12', action = act.ShowLauncherArgs({flags = 'DOMAINS|FUZZY'}) },
     {
+        key = 'D',
+        mods = 'LEADER',
+        action = act.ShowLauncherArgs({flags = 'DOMAINS|FUZZY'}),
+    },
+    {
+        key = 'f',
+        mods = 'LEADER',
+        action = act.ShowLauncherArgs({flags = 'DOMAINS|FUZZY|TABS|LAUNCH_MENU_ITEMS|KEY_ASSIGNMENTS|WORKSPACES|COMMANDS'}),
+    },
+    {
         key = '°',
         -- mods = 'SHIFT|ALT',
         action = act.SpawnTab('CurrentPaneDomain'),
