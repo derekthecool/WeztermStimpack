@@ -6,6 +6,25 @@ local act = require('wezterm').action
 local mux = wezterm.mux
 
 return {
+    -- Move between wezterm workspaces (tmux sessions)
+    { key = ')', mods = 'SHIFT|LEADER', action = act.SwitchWorkspaceRelative(1) },
+    { key = '(', mods = 'SHIFT|LEADER', action = act.SwitchWorkspaceRelative(-1) },
+
+    -- Workspace select
+    {
+        key = 's',
+        mods = 'LEADER',
+        action = act.ShowLauncherArgs({ flags = 'WORKSPACES|FUZZY', title = 'Switch Workspace' }),
+    },
+    {
+        key = 'S',
+        mods = 'SHIFT|LEADER',
+        action = act.ShowLauncherArgs({
+            flags = 'DOMAINS|FUZZY|TABS|LAUNCH_MENU_ITEMS|KEY_ASSIGNMENTS|WORKSPACES|COMMANDS',
+            title = 'Fuzzy Chooser',
+        }),
+    },
+
     -- Move between wezterm tabs (tmux windows)
     { key = 'p', mods = 'LEADER', action = act.ActivateTabRelative(-1) },
     { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
@@ -89,5 +108,4 @@ return {
     --
     -- This one is very, very cool!
     -- Next layout leader + space
-
 }

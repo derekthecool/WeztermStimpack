@@ -16,6 +16,8 @@ config.colors = require('WeztermStimpack.colors')
 config.window_close_confirmation = 'NeverPrompt'
 config.scrollback_lines = 5000
 
+config.debug_key_events = true
+
 -- Visual settings
 config.color_scheme = 'Atelier Sulphurpool (base16)' -- Same as my neovim config
 config.window_background_opacity = 0.72
