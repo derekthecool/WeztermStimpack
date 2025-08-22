@@ -19,8 +19,8 @@ config.scrollback_lines = 5000
 config.debug_key_events = true
 
 -- Visual settings
-config.color_scheme = 'Atelier Sulphurpool (base16)' -- Same as my neovim config
-config.window_background_opacity = 0.72
+config.color_scheme = 'Tokyo Night' -- Same as my neovim config
+-- config.window_background_opacity = 0.72
 config.window_decorations = 'RESIZE' -- No title bar, but allow window resize with mouse
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 } -- No padding
 config.show_update_window = false
