@@ -1,7 +1,7 @@
 local config = {}
 
 -- Use pwsh as default shell
-config.default_prog = { 'pwsh' }
+config.default_prog = { 'pwsh', '-NoLogo' }
 config.exit_behavior = 'CloseOnCleanExit'
 
 -- My configuration WeztermStimpack
