@@ -1,6 +1,5 @@
 local wezterm = require('wezterm')
 local act = require('wezterm').action
-local mux = wezterm.mux
 
 Global_KeepRunningLoopedCommand = false
 
@@ -15,19 +14,6 @@ local function urlencode(url)
     url = url:gsub('\n', '\r\n')
     url = url:gsub('([^%w ])', char_to_hex)
     url = url:gsub(' ', '+')
-    return url
-end
-
-local hex_to_char = function(x)
-    return string.char(tonumber(x, 16))
-end
-
-local urldecode = function(url)
-    if url == nil then
-        return
-    end
-    url = url:gsub('+', ' ')
-    url = url:gsub('%%(%x%x)', hex_to_char)
     return url
 end
 
@@ -53,6 +39,11 @@ return {
         key = 'w',
         mods = 'LEADER',
         action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'pwsh -c ls' } }),
+    },
+    {
+        key = 'i',
+        mods = 'LEADER',
+        action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'claude' } }),
     },
 
     {
@@ -627,10 +618,9 @@ return {
     { key = 'f',          mods = 'SHIFT|CTRL',     action = act.Search('CurrentSelectionOrEmptyString') },
     { key = 'f',          mods = 'SUPER',          action = act.Search('CurrentSelectionOrEmptyString') },
     { key = 'L',          mods = 'CTRL',           action = act.ShowDebugOverlay },
-    { key = 'l',          mods = 'LEADER',           action = act.ShowDebugOverlay },
+    { key = 'l',          mods = 'LEADER',         action = act.ShowDebugOverlay },
     { key = 'L',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
     { key = 'l',          mods = 'SHIFT|CTRL',     action = act.ShowDebugOverlay },
-    { key = 'l',          mods = 'LEADER',         action = act.ShowDebugOverlay },
     { key = 'T',          mods = 'CTRL',           action = act.SpawnTab('CurrentPaneDomain') },
     { key = 'T',          mods = 'SHIFT|CTRL',     action = act.SpawnTab('CurrentPaneDomain') },
     { key = 't',          mods = 'SHIFT|CTRL',     action = act.SpawnTab('CurrentPaneDomain') },

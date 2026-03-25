@@ -13,3 +13,5 @@ configurable in lua, like neovim.
 # This sets config items to debug, everything else to info
 [System.Environment]::SetEnvironmentVariable('WEZTERM_LOG', 'config=debug,info', [System.EnvironmentVariableTarget]::User)
 ```
+
+Log file is located at: `~/.local/share/wezterm/`

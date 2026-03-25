@@ -1,4 +1,5 @@
-local config = {}
+local wezterm = require('wezterm') ---@type Wezterm
+local config = wezterm.config_builder() ---@type Config
 
 -- Use pwsh as default shell
 config.default_prog = { 'pwsh', '-NoLogo' }
@@ -26,7 +27,7 @@ config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 } -- No paddi
 config.show_update_window = false
 
 -- Easy picks for steno keyboard
-config.quick_select_alphabet = 'abcdefghijklmnopqrstuvwxy'
+config.quick_select_alphabet = 'asdfqwerzxcvjklmiuopghtybn'
 config.quick_select_patterns = require('WeztermStimpack.quick-select-patterns')
 
 -- Set leader, disable defaults, load keymap files

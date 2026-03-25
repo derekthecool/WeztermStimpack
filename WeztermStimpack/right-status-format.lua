@@ -52,7 +52,7 @@ wezterm.on('update-right-status', function(window, pane)
     local charge_percent_index = 1
     for _, b in ipairs(wezterm.battery_info()) do
         local charge_percent = b.state_of_charge * 100
-        charge_percent_index = math.floor(charge_percent / 10)
+        charge_percent_index = math.max(1, math.floor(charge_percent / 10))
         bat = string.format('%s %0.0f%%', battery_levels[charge_percent_index][1], charge_percent)
     end
 

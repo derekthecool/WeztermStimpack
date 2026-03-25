@@ -1,13 +1,12 @@
 -- Wezterm modules
 local wezterm = require('wezterm')
-local mux = wezterm.mux
 
 local M = {}
 
 M.path = {}
 
 M.path.separator = function()
-    if require('wezterm').target_triple == 'x86_64-pc-windows-msvc' then
+    if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
         return [[\]]
     else
         return '/'
