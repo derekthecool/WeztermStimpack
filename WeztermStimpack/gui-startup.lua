@@ -17,12 +17,10 @@ wezterm.on('gui-startup', function(cmd)
     -- Top pane is for the editor, bottom pane is for the build tool
     local tab, build_pane, window = mux.spawn_window({
         workspace = workspaces[1],
-        cwd = string.format('%s/.mywiki', wezterm.home_dir),
+        cwd = wezterm.home_dir,
         args = args,
     })
 
-    -- Open neovim to wezterm config
-    build_pane:send_text('nvim README.md\r\n')
     tab:set_title('CommandStation')
 
     -- Build project directories as found in the directory ./projects/*.lua
