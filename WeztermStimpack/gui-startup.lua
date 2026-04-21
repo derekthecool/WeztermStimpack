@@ -21,7 +21,7 @@ wezterm.on('gui-startup', function(cmd)
         args = args,
     })
 
-    tab:set_title('CommandStation')
+    -- Tab title will show process name automatically
 
     -- Build project directories as found in the directory ./projects/*.lua
     -- local project_directory_files = wezterm.read_dir(crossplatform.path.join_path(wezterm.config_dir, 'projects'))

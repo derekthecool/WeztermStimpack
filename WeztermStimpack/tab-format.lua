@@ -13,9 +13,25 @@ local function tab_title(tab_info)
     if title and #title > 0 then
         return title
     end
-    -- Otherwise, use the title from the active pane
-    -- in that tab
-    return tab_info.active_pane.title
+
+    -- Otherwise, use the title from the active pane in that tab
+    local pane_title = tab_info.active_pane.title
+
+    -- If pane title is empty, use the current working directory basename
+    if not pane_title or #pane_title == 0 then
+        local cwd = tab_info.active_pane.current_working_dir
+        if cwd then
+            -- Extract just the folder name from the path
+            local folder = cwd:match('[^/\\]+$')
+            if folder and #folder > 0 then
+                return folder
+            end
+        end
+        -- Ultimate fallback to shell name
+        return 'pwsh'
+    end
+
+    return pane_title
 end
 
 -- Allow custom tab rename
