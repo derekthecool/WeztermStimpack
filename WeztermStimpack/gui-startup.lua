@@ -18,7 +18,7 @@ wezterm.on('gui-startup', function(cmd)
     local tab, build_pane, window = mux.spawn_window({
         workspace = workspaces[1],
         cwd = wezterm.home_dir,
-        args = args,
+        args = #args > 0 and args or { 'pwsh', '-NoLogo' },
     })
 
     -- Tab title will show process name automatically

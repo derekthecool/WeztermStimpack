@@ -17,21 +17,21 @@ local function tab_title(tab_info)
     -- Otherwise, use the title from the active pane in that tab
     local pane_title = tab_info.active_pane.title
 
-    -- If pane title is empty, use the current working directory basename
+    -- Debug: log what we're getting
+    wezterm.log_info('pane_title: "' .. (pane_title or 'nil') .. '"')
+
+    -- If pane title is empty, try to get the foreground process name
     if not pane_title or #pane_title == 0 then
-        local cwd = tab_info.active_pane.current_working_dir
-        if cwd then
-            -- Extract just the folder name from the path
-            local folder = cwd:match('[^/\\]+$')
-            if folder and #folder > 0 then
-                return folder
-            end
+        local success, process_name = pcall(function()
+            return tab_info.active_pane:get_foreground_process_name()
+        end)
+        wezterm.log_info('process_name: "' .. (process_name or 'nil') .. '"')
+        if success and process_name and #process_name > 0 then
+            return process_name
         end
-        -- Ultimate fallback to shell name
-        return 'pwsh'
     end
 
-    return pane_title
+    return pane_title or ''
 end
 
 -- Allow custom tab rename
@@ -42,9 +42,6 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 
     local left_icon = ''
     local right_icon = ''
-
-    local edge_background = '#0000ff'
-    local edge_foreground = '#ff0fff'
 
     local full_background = colors.tab_bar.background
     local background = colors.tab_bar.inactive_tab.bg_color

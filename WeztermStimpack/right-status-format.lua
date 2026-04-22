@@ -116,3 +116,7 @@ wezterm.on('update-right-status', function(window, pane)
         'ResetAttributes',
     }))
 end)
+
+wezterm.on('window-config-reloaded', function(window, pane)
+    window:toast_notification('wezterm', 'config reloaded', nil, 4000)
+end)

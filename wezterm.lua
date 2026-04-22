@@ -18,6 +18,7 @@ config.window_close_confirmation = 'NeverPrompt'
 config.scrollback_lines = 5000
 
 config.debug_key_events = true
+config.warn_about_missing_glyphs = false
 
 -- Visual settings
 config.color_scheme = 'Tokyo Night' -- Same as my neovim config
