@@ -28,8 +28,4 @@ return {
     test.txt
     ]]
     [[\S+?\.(?:log|txt)]],
-
-    -- Capture previous commands
-    -- The arrow is the start of the successful return code indicator from starship prompt
-    [[(?:➜)\s+(.*$)]],
 }

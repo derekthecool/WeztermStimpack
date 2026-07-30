@@ -38,12 +38,12 @@ return {
     {
         key = 'w',
         mods = 'LEADER',
-        action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'pwsh -c ls' } }),
+        action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'pwsh', '-NoProfile' } }),
     },
     {
         key = 'i',
         mods = 'LEADER',
-        action = act.SpawnCommandInNewTab({ domain = 'CurrentPaneDomain', args = { 'claude' } }),
+        action = act.SplitHorizontal({ domain = 'CurrentPaneDomain', args = { 'claude' } }),
     },
 
     {
