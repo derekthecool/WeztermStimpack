@@ -641,4 +641,12 @@ return {
     { key = 'Z', mods = 'CTRL', action = act.TogglePaneZoomState },
     { key = 'Z', mods = 'SHIFT|CTRL', action = act.TogglePaneZoomState },
     { key = 'z', mods = 'SHIFT|CTRL', action = act.TogglePaneZoomState },
+
+    -- Prevent NUL bytes from synthetic LeftShift events (Plover scan_code=0 bug)
+    -- This problem plagued me running Windows + Plover + Wezterm + ( WSL or ssh )
+    -- The fix is to block empty shifts with a no-op
+    { key = 'LeftShift', mods = 'SHIFT', action = act.Nop },
+    { key = 'LeftShift', mods = 'NONE', action = act.Nop },
+    { key = 'RightShift', mods = 'SHIFT', action = act.Nop },
+    { key = 'RightShift', mods = 'NONE', action = act.Nop },
 }
