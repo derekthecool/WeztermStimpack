@@ -20,6 +20,10 @@ config.scrollback_lines = 5000
 config.debug_key_events = true
 config.warn_about_missing_glyphs = false
 
+-- Plover's synthetic (SendInput scan_code=0) key events get mangled into garbage
+-- control bytes over WSL/ssh otherwise -- see https://github.com/wezterm/wezterm/issues/3934
+config.allow_win32_input_mode = false
+
 -- Visual settings
 config.color_scheme = 'Tokyo Night' -- Same as my neovim config
 -- config.window_background_opacity = 0.72
