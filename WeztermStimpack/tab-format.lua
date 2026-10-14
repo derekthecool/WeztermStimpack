@@ -38,31 +38,53 @@ end
 -- Early versions did not support this, yay now we have it!
 -- https://wezfurlong.org/wezterm/config/lua/keyassignment/PromptInputLine.html?h=
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-    local pane_title = tab_title(tab)
-
     local left_icon = ''
     local right_icon = ''
 
-    local full_background = colors.tab_bar.background
-    local background = colors.tab_bar.inactive_tab.bg_color
-    local foreground = background
+    -- Reserve room for the caps and trailing space so the title never gets hard-clipped
+    -- by wezterm (which cuts mid-word and drops the right cap).
+    -- A zoomed pane (leader + z) gets a [Z] prefix so it is obvious other panes are hidden
+    local zoom_marker = tab.active_pane.is_zoomed and '[Z] ' or ''
+    local reserved = wezterm.column_width(left_icon) + wezterm.column_width(right_icon) + 1
+    local available = math.max(max_width - reserved - wezterm.column_width(zoom_marker), 2)
 
+    -- Strip any leading path / .exe so process names stay short, then truncate with an ellipsis
+    local title = tab_title(tab):gsub('^.*[\\/]', ''):gsub('%.exe$', '')
+    local pane_title = title
+    if wezterm.column_width(title) > available then
+        pane_title = wezterm.truncate_right(title, available - 1) .. '…'
+    end
+
+    local full_background = colors.tab_bar.background
+
+    -- The caps and the title share one fill color; the color shows which state the tab is in
+    local edge_color = '#2f3b72' -- inactive
+    local text_color = '#c0c0c0'
+    local zoom_color = '#00FF00' -- Same green as the battery at full charge
+    local italic = false
     if tab.is_active then
-        background = full_background
+        edge_color = '#7a82e0' -- blue shifted toward purple
+        text_color = '#0b1020'
+        zoom_color = '#0a4d12' -- bright green is unreadable on the blue fill
+        italic = true
     elseif hover then
-        background = colors.tab_bar.inactive_tab_hover.bg_color
+        edge_color = '#8a63c7'
+        text_color = '#ffffff'
     end
 
     return {
         { Background = { Color = full_background } },
-        { Foreground = { Color = background } },
+        { Foreground = { Color = edge_color } },
         { Text = left_icon },
-        'ResetAttributes',
+        { Background = { Color = edge_color } },
+        { Foreground = { Color = zoom_color } },
+        { Text = zoom_marker },
+        { Foreground = { Color = text_color } },
+        { Attribute = { Italic = italic } },
         { Text = pane_title },
-        { Background = { Color = full_background } },
         'ResetAttributes',
         { Background = { Color = full_background } },
-        { Foreground = { Color = background } },
+        { Foreground = { Color = edge_color } },
         { Text = right_icon },
         { Text = ' ' },
     }

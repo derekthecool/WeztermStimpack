@@ -12,6 +12,7 @@ require('WeztermStimpack.gui-startup')
 require('WeztermStimpack.bell-settings').init(config)
 require('WeztermStimpack.font-settings').init(config)
 require('WeztermStimpack.tab-format').init(config)
+config.tab_max_width = 24
 config.ssh_domains = require('WeztermStimpack.ssh-domains')
 config.colors = require('WeztermStimpack.colors')
 config.window_close_confirmation = 'NeverPrompt'
