@@ -71,6 +71,44 @@ end)
 wezterm.on('update-status', clear_active_pane)
 wezterm.on('window-focus-changed', clear_active_pane)
 
+-- Blink colors per attention kind. The dim phase always uses white text
+local BLINK_STYLES = {
+    input = { bright = '#ff3b4e', dim = '#7a1a28', text_bright = '#ffffff' }, -- needs you: red
+    done = { bright = '#2ecc71', dim = '#14532d', text_bright = '#0b1020' }, -- finished: green
+}
+
+---@param kind string|nil 'input', 'done' or nil
+---@return string|nil fill_color blinks between a bright and a dim shade once per second, nil when not flagged
+---@return string|nil text_color
+function M.blink_colors(kind)
+    local style = kind and BLINK_STYLES[kind]
+    if not style then
+        return nil, nil
+    end
+
+    local bright_phase = os.time() % 2 == 0
+    return bright_phase and style.bright or style.dim, bright_phase and style.text_bright or '#ffffff'
+end
+
+---@return table<string, string> workspace name -> 'input' (wins) or 'done' for workspaces with unseen flagged panes
+function M.workspace_kinds()
+    local kinds = {}
+    local ok = pcall(function()
+        for _, mux_window in ipairs(wezterm.mux.all_windows()) do
+            local workspace = mux_window:get_workspace()
+            for _, tab in ipairs(mux_window:tabs()) do
+                for _, pane in ipairs(tab:panes()) do
+                    local kind = flagged_kind(pane:pane_id())
+                    if kind == 'input' or (kind and not kinds[workspace]) then
+                        kinds[workspace] = kind
+                    end
+                end
+            end
+        end
+    end)
+    return ok and kinds or {}
+end
+
 ---@param tab_info table TabInformation of the tab being drawn
 ---@return string|nil kind 'input' (wins if panes disagree), 'done' or nil
 function M.attention_kind(tab_info)

@@ -4,12 +4,6 @@ local attention = require('WeztermStimpack.attention')
 
 local M = {}
 
--- Blink colors per attention kind (see attention.lua). The dim phase always uses white text
-local ATTENTION_STYLES = {
-    input = { bright = '#ff3b4e', dim = '#7a1a28', text_bright = '#ffffff' }, -- needs you: red
-    done = { bright = '#2ecc71', dim = '#14532d', text_bright = '#0b1020' }, -- finished: green
-}
-
 -- This function returns the suggested title for a tab.
 -- It prefers the title that was set via `tab:set_title()`
 -- or `wezterm cli set-tab-title`, but falls back to the
@@ -81,12 +75,11 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 
     -- A pane in this tab rang the bell while unseen (e.g. Claude Code wants input or finished): blink once per second.
     -- Overrides the active/hover colors. The tab bar repaints on update-status (status_update_interval).
-    local attention_style = ATTENTION_STYLES[attention.attention_kind(tab)]
-    if attention_style then
-        local bright_phase = os.time() % 2 == 0
-        edge_color = bright_phase and attention_style.bright or attention_style.dim
-        text_color = bright_phase and attention_style.text_bright or '#ffffff'
-        zoom_color = text_color
+    local blink_fill, blink_text = attention.blink_colors(attention.attention_kind(tab))
+    if blink_fill then
+        edge_color = blink_fill
+        text_color = blink_text
+        zoom_color = blink_text
         italic = false
     end
 
