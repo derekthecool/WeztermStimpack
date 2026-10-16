@@ -114,6 +114,12 @@ wezterm.on('update-right-status', function(window, pane)
         separator_icon_background,
         separator_icon,
         'ResetAttributes',
+
+        -- Invisible tick: wezterm only re-runs format-tab-title when the bar content changes, so without this a
+        -- background tab flagged by attention.lua would not be redrawn (blinking) until something else changed.
+        { Foreground = { Color = (os.time() % 2 == 0) and '#010101' or '#020202' } },
+        { Text = ' ' },
+        'ResetAttributes',
     }))
 end)
 
