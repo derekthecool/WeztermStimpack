@@ -18,15 +18,13 @@ local function tab_title(tab_info)
     -- Otherwise, use the title from the active pane in that tab
     local pane_title = tab_info.active_pane.title
 
-    -- Debug: log what we're getting
-    wezterm.log_info('pane_title: "' .. (pane_title or 'nil') .. '"')
-
-    -- If pane title is empty, try to get the foreground process name
+    -- If pane title is empty, try to get the foreground process name.
+    -- Nothing is logged here: format-tab-title runs several times a second, so a log line in this
+    -- function grows the wezterm log by hundreds of megabytes over a few days of uptime.
     if not pane_title or #pane_title == 0 then
         local success, process_name = pcall(function()
             return tab_info.active_pane:get_foreground_process_name()
         end)
-        wezterm.log_info('process_name: "' .. (process_name or 'nil') .. '"')
         if success and process_name and #process_name > 0 then
             return process_name
         end
